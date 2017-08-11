@@ -104,8 +104,8 @@ return [
     */
 
     'key' => env('APP_KEY'),
-    'cipher' => 'AES-128-CBC',
-    /*'cipher' => 'AES-256-CBC', this chiper wase change by AES-128-CBC*/
+    //'cipher' => 'AES-128-CBC',
+    'cipher' => 'AES-256-CBC', //this chiper wase change by AES-128-CBC*/
 
     /*
     |--------------------------------------------------------------------------
