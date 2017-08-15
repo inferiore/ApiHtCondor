@@ -44,6 +44,30 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+
+        if ($exception instanceof ModelNotFoundException)
+        {
+           return response()->json([
+                    'error' => 'No se encontro el recurso solicitado'
+                ], 404) ;
+        }
+        if ($exception instanceof NotFoundHttpException)
+        {
+            return response()->json([
+                    'error' => 'No se encontro el recurso solicitado'
+                ], 404) ;
+        }
+        // $user = User::where('email', 'rol_id', config('constantes.rol_administrador'))->first();
+        // En caso que no cargue la pagina comentar esta linea
+        // $user->notify(new \Notificaciones\ErrorNotificacion($exception));
+        if($exception instanceof QueryException)
+        {
+            return response([
+                    'error' => 'La petici&oacute;n del navegador no se ha podido completar porque se ha producido un error en la consulta.',
+                    'debug' => $exception->getMessage()
+                ], 409);
+        }
+
         return parent::render($request, $exception);
     }
 

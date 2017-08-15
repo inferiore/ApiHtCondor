@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Herramienta;
+use Illuminate\Http\Request;
 class HerramientaController extends Controller 
 {
 
@@ -11,9 +12,19 @@ class HerramientaController extends Controller
    *
    * @return Response
    */
-  public function index()
+
+  protected $herramienta;
+
+  function __construct ( Herramienta $herramienta){
+    $this->herramienta=$herramienta;
+   }
+  public function index(Request $request)
   {
-    dd('test');
+    $herramientas = $this->herramienta->filters($request->all())->get();
+   $data = ["herramientas"=>$herramientas];
+
+   return response()
+      ->json(compact('data')); 
     
   }
 
@@ -32,9 +43,16 @@ class HerramientaController extends Controller
    *
    * @return Response
    */
-  public function store()
+  public function store(Request $request)
   {
-    
+    dd($request->all());
+    $herramientas=$this->herramienta;
+   
+    $herramientas=$herramientas->fill($request->all());
+    $this->herramienta->save();
+     $data = ["herramienta"=>$herramientas];
+    return response()
+      ->json(compact('data'));   
   }
 
   /**
@@ -56,7 +74,10 @@ class HerramientaController extends Controller
    */
   public function edit($id)
   {
-    
+    $herramientas=$this->herramienta->find($id);
+       $data = ["herramienta"=>$herramientas];
+       return response()
+      ->json(compact('data'));
   }
 
   /**
@@ -67,7 +88,14 @@ class HerramientaController extends Controller
    */
   public function update($id)
   {
-    
+    $herramientas=$this->herramienta->find($id);
+    $herramientas= $herramientas->fill($request->all());
+       
+        $herramientas->update();
+
+           $data = ["herramienta"=>$herramientas];
+       return response()
+      ->json(compact('data'));
   }
 
   /**
@@ -78,7 +106,9 @@ class HerramientaController extends Controller
    */
   public function destroy($id)
   {
-    
+    $herramientas=$this->herramienta->findOrFail($id);
+  
+  $herramientas->delete();
   }
   
 }

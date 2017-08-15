@@ -1,7 +1,9 @@
 <?php 
 
 namespace App\Http\Controllers;
-
+use App\Models\EstadoHerramienta;
+use Illuminate\Http\Request;
+use  App\Http\Requests\EstadoHerramientaRequest;
 class EstadoHerramientaController extends Controller 
 {
 
@@ -10,10 +12,23 @@ class EstadoHerramientaController extends Controller
    *
    * @return Response
    */
-  public function index()
-  {
-    
+  protected $estadoHerramienta;
+
+   
+   function __construct ( EstadoHerramienta $estadoHerramienta){
+    $this->estadoHerramienta=$estadoHerramienta;
+   }
+
+  public function index(Request $request){
+
+   $estados = $this->estadoHerramienta->filters($request->all())->get();
+   $data = ["estados"=>$estados];
+
+   return response()
+      ->json(compact('data')); 
+
   }
+
 
   /**
    * Show the form for creating a new resource.
@@ -22,6 +37,7 @@ class EstadoHerramientaController extends Controller
    */
   public function create()
   {
+
     
   }
 
@@ -30,8 +46,17 @@ class EstadoHerramientaController extends Controller
    *
    * @return Response
    */
-  public function store()
+  public function store(Request $request)
   {
+    
+     
+    $estado=$this->estadoHerramienta;
+   
+    $estado=$estado->fill($request->all());
+    $this->estadoHerramienta->save();
+     $data = ["estado"=>$estado];
+    return response()
+      ->json(compact('data'));  
     
   }
 
@@ -54,8 +79,12 @@ class EstadoHerramientaController extends Controller
    */
   public function edit($id)
   {
-    
-  }
+      $estado=$this->estadoHerramienta->find($id);
+       $data = ["estado"=>$estado];
+       return response()
+      ->json(compact('data'));
+    }
+  
 
   /**
    * Update the specified resource in storage.
@@ -63,8 +92,17 @@ class EstadoHerramientaController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update(Request $request, $id)
   {
+   // dd($request->all());
+   $estado=$this->estadoHerramienta->find($id);
+   $estado= $estado->fill($request->all());
+       
+        $estado->update();
+
+           $data = ["estado"=>$estado];
+       return response()
+      ->json(compact('data'));
     
   }
 
@@ -76,7 +114,10 @@ class EstadoHerramientaController extends Controller
    */
   public function destroy($id)
   {
-    
+    $estado=$this->estadoHerramienta->findOrFail($id);
+  
+  $estado->delete();
+
   }
   
 }

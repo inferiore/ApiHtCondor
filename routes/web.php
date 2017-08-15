@@ -11,8 +11,14 @@
 |
 */
 
+use App\Models\Herramienta;
+
 Route::get('/', function () {
-    return view('welcome');
+	
+	echo class_exists("App\Models\EstadoHerramienta");
+
+	//phpinfo();
+    //return view('welcome');
 });
 
 Auth::routes();
