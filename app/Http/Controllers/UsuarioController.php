@@ -1,6 +1,8 @@
 <?php 
 
 namespace App\Http\Controllers;
+use App\Models\Usuario;
+use Illuminate\Http\Request;
 
 class UsuarioController extends Controller 
 {
@@ -10,9 +12,19 @@ class UsuarioController extends Controller
    *
    * @return Response
    */
-  public function index()
-  {
-    
+  protected $usuario;  
+
+  function __construct ( Usuario $usuario){
+    $this->usuario=$usuario;
+   }
+  public function index(Request $request){
+
+   $usuarios = $this->usuario->filters($request->all())->get();
+   $data = ["usuarios"=>$usuarios];
+
+   return response()
+      ->json(compact('data')); 
+
   }
 
   /**
@@ -30,8 +42,17 @@ class UsuarioController extends Controller
    *
    * @return Response
    */
-  public function store()
+  public function store(Request $request)
   {
+    
+     
+    $usuarios=$this->usuario;
+   
+    $usuarios=$usuarios->fill($request->all());
+    $this->usuario->save();
+     $data = ["usuario"=>$usuarios];
+    return response()
+      ->json(compact('data'));  
     
   }
 
@@ -54,8 +75,11 @@ class UsuarioController extends Controller
    */
   public function edit($id)
   {
-    
-  }
+      $usuarios=$this->usuario->find($id);
+       $data = ["usuario"=>$usuarios];
+       return response()
+      ->json(compact('data'));
+    }
 
   /**
    * Update the specified resource in storage.
@@ -63,8 +87,17 @@ class UsuarioController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update(Request $request, $id)
   {
+   // dd($request->all());
+   $usuarios=$this->usuario->find($id);
+   $usuarios= $usuarios->fill($request->all());
+       
+        $usuarios->update();
+
+           $data = ["usuario"=>$usuarios];
+       return response()
+      ->json(compact('data'));
     
   }
 
@@ -76,7 +109,10 @@ class UsuarioController extends Controller
    */
   public function destroy($id)
   {
-    
+    $usuarios=$this->usuario->findOrFail($id);
+  
+  $usuarios->delete();
+
   }
   
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Herramienta;
 use Illuminate\Http\Request;
+use  App\Http\Requests\HerramientaRequest;
+
 class HerramientaController extends Controller 
 {
 
@@ -45,7 +47,7 @@ class HerramientaController extends Controller
    */
   public function store(Request $request)
   {
-    dd($request->all());
+    
     $herramientas=$this->herramienta;
    
     $herramientas=$herramientas->fill($request->all());

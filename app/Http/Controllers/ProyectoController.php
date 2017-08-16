@@ -1,6 +1,8 @@
 <?php 
 
 namespace App\Http\Controllers;
+use App\Models\Proyecto;
+use Illuminate\Http\Request;
 
 class ProyectoController extends Controller 
 {
@@ -10,9 +12,20 @@ class ProyectoController extends Controller
    *
    * @return Response
    */
-  public function index()
-  {
-    
+  protected $proyecto;
+
+  function __construct ( Proyecto $proyecto){
+    $this->proyecto=$proyecto;
+   }
+
+  public function index(Request $request){
+
+   $proyectos = $this->proyecto->filters($request->all())->get();
+   $data = ["proyectos"=>$proyectos];
+
+   return response()
+      ->json(compact('data')); 
+
   }
 
   /**
@@ -30,8 +43,17 @@ class ProyectoController extends Controller
    *
    * @return Response
    */
-  public function store()
+  public function store(Request $request)
   {
+    
+     
+    $proyectos=$this->proyecto;
+   
+    $proyectos=$proyectos->fill($request->all());
+    $this->proyecto->save();
+     $data = ["proyecto"=>$proyectos];
+    return response()
+      ->json(compact('data'));  
     
   }
 
@@ -54,8 +76,11 @@ class ProyectoController extends Controller
    */
   public function edit($id)
   {
-    
-  }
+      $proyectos=$this->proyecto->find($id);
+       $data = ["proyecto"=>$proyectos];
+       return response()
+      ->json(compact('data'));
+    }
 
   /**
    * Update the specified resource in storage.
@@ -63,8 +88,17 @@ class ProyectoController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update(Request $request, $id)
   {
+   // dd($request->all());
+   $proyectos=$this->proyecto->find($id);
+   $proyectos= $proyectos->fill($request->all());
+       
+        $proyectos->update();
+
+           $data = ["proyecto"=>$proyectos];
+       return response()
+      ->json(compact('data'));
     
   }
 
@@ -76,7 +110,10 @@ class ProyectoController extends Controller
    */
   public function destroy($id)
   {
-    
+    $proyectos=$this->proyecto->findOrFail($id);
+  
+    $proyectos->delete();
+
   }
   
 }

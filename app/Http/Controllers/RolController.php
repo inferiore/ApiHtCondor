@@ -1,6 +1,8 @@
 <?php 
 
 namespace App\Http\Controllers;
+use App\Models\Rol;
+use Illuminate\Http\Request;
 
 class RolController extends Controller 
 {
@@ -10,9 +12,20 @@ class RolController extends Controller
    *
    * @return Response
    */
-  public function index()
-  {
-    
+
+  protected $rol;  
+
+  function __construct ( Rol $rol){
+    $this->rol=$rol;
+   }
+  public function index(Request $request){
+
+   $roles = $this->rol->filters($request->all())->get();
+   $data = ["roles"=>$roles];
+
+   return response()
+      ->json(compact('data')); 
+
   }
 
   /**
@@ -30,8 +43,17 @@ class RolController extends Controller
    *
    * @return Response
    */
-  public function store()
+  public function store(Request $request)
   {
+    
+     
+    $roles=$this->rol;
+   
+    $roles=$roles->fill($request->all());
+    $this->rol->save();
+     $data = ["rol"=>$roles];
+    return response()
+      ->json(compact('data'));  
     
   }
 
@@ -54,8 +76,11 @@ class RolController extends Controller
    */
   public function edit($id)
   {
-    
-  }
+      $roles=$this->rol->find($id);
+       $data = ["rol"=>$roles];
+       return response()
+      ->json(compact('data'));
+    }
 
   /**
    * Update the specified resource in storage.
@@ -63,8 +88,17 @@ class RolController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update(Request $request, $id)
   {
+   // dd($request->all());
+   $roles=$this->rol->find($id);
+   $roles= $roles->fill($request->all());
+       
+        $roles->update();
+
+           $data = ["rol"=>$roles];
+       return response()
+      ->json(compact('data'));
     
   }
 
@@ -76,7 +110,10 @@ class RolController extends Controller
    */
   public function destroy($id)
   {
-    
+    $roles=$this->rol->findOrFail($id);
+  
+  $roles->delete();
+
   }
   
 }
