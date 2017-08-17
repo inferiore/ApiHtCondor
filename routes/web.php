@@ -15,10 +15,8 @@ use App\Models\Herramienta;
 
 Route::get('/', function () {
 	
-	echo class_exists("App\Models\EstadoHerramienta");
-
-	//phpinfo();
-    //return view('welcome');
+	
+	return view('welcome');
 });
 
 Auth::routes();
