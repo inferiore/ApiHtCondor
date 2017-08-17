@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\EstadoHerramienta;
 use Illuminate\Http\Request;
-use  App\Http\Requests\EstadoHerramientaRequest;
+use  Validaciones\EstadoHerramientaRequest;
 class EstadoHerramientaController extends Controller 
 {
 
@@ -46,7 +46,7 @@ class EstadoHerramientaController extends Controller
    *
    * @return Response
    */
-  public function store(Request $request)
+  public function store(EstadoHerramientaRequest $request)
   {
     
      
@@ -79,7 +79,7 @@ class EstadoHerramientaController extends Controller
    */
   public function edit($id)
   {
-      $estado=$this->estadoHerramienta->find($id);
+      $estado=$this->estadoHerramienta->findOrFail($id);
        $data = ["estado"=>$estado];
        return response()
       ->json(compact('data'));
@@ -95,7 +95,7 @@ class EstadoHerramientaController extends Controller
   public function update(Request $request, $id)
   {
    // dd($request->all());
-   $estado=$this->estadoHerramienta->find($id);
+   $estado=$this->estadoHerramienta->findOrFail($id);
    $estado= $estado->fill($request->all());
        
         $estado->update();

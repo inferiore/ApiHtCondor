@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Models;
+use App\Intermediate;
 
-use Illuminate\Database\Eloquent\Model;
-
-class EstadoHerramienta extends Model 
+class EstadoHerramienta extends Intermediate 
 {
 
     protected $table = 'estadosHerramienta';

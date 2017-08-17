@@ -15,8 +15,8 @@ use App\Models\Herramienta;
 
 Route::get('/', function () {
 	
-	
-	return view('welcome');
+phpinfo();	
+//	return view('welcome');
 });
 
 Auth::routes();
