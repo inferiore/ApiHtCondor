@@ -1,7 +1,7 @@
 <?php 
 
 namespace App\Http\Controllers;
-
+use App\Models\Terea;
 class TereaController extends Controller 
 {
 
@@ -10,9 +10,19 @@ class TereaController extends Controller
    *
    * @return Response
    */
-  public function index()
-  {
-    
+  protected $terea;
+  function __construct ( Terea $terea){
+    $this->terea=$terea;
+   }
+
+  public function index(Request $request){
+
+   $tereas = $this->terea->filters($request->all())->get();
+   $data = ["tereas"=>$tereas];
+
+   return response()
+      ->json(compact('data')); 
+
   }
 
   /**
@@ -30,8 +40,17 @@ class TereaController extends Controller
    *
    * @return Response
    */
-  public function store()
+  public function store(Request $request)
   {
+    
+     
+    $tereas=$this->terea;
+   
+    $tereas=$tereas->fill($request->all());
+    $this->terea->save();
+     $data = ["terea"=>$tereas];
+    return response()
+      ->json(compact('data'));  
     
   }
 
@@ -54,8 +73,11 @@ class TereaController extends Controller
    */
   public function edit($id)
   {
-    
-  }
+      $tereas=$this->terea->findOrFail($id);
+       $data = ["Terea"=>$tereas];
+       return response()
+      ->json(compact('data'));
+    }
 
   /**
    * Update the specified resource in storage.
@@ -63,8 +85,17 @@ class TereaController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update(Terea $request, $id)
   {
+
+   $tereas=$this->terea->findOrFail($id);
+   $tereas= $tereas->fill($request->all());
+       
+        $tereas->update();
+
+           $data = ["terea"=>$tereas];
+       return response()
+      ->json(compact('data'));
     
   }
 
@@ -76,7 +107,10 @@ class TereaController extends Controller
    */
   public function destroy($id)
   {
-    
+    $tereas=$this->terea->findOrFail($id);
+  
+  $tereas->delete();
+
   }
   
 }

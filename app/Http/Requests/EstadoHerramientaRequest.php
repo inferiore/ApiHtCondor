@@ -2,8 +2,7 @@
 
 namespace Validaciones;
 
-use Validaciones\ApiRequest;
-use Illuminate\Foundation\Http\FormRequest;
+
 
 class EstadoHerramientaRequest extends ApiRequest
 {

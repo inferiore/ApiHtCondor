@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace Validaciones;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class HerramientaRequest extends FormRequest
+class HerramientaRequest extends ApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.

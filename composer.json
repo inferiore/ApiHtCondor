@@ -20,7 +20,8 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "Validaciones\\"  : "app/Http/Requests/"
+            "Validaciones\\": "app/Http/Requests/"
+           
         }
     },
     "autoload-dev": {
