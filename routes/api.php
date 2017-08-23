@@ -13,9 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('jwt.auth')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('login', 'ApiAuthController@authenticate');
+
+Route::group(['middleware' => ['jwt.auth']], function () {
 
 Route::resource('herramienta', 'HerramientaController');
 Route::resource('proyecto', 'ProyectoController');
@@ -24,3 +28,5 @@ Route::resource('terea', 'TereaController');
 Route::resource('usuario', 'UsuarioController');
 Route::resource('archivo', 'ArchivoController');
 Route::resource('rol', 'RolController');
+
+});	

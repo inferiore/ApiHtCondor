@@ -100,6 +100,7 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Acceso no autorizado'], 401);
         }
-        return redirect()->guest(url('/'));
+         return response()->json(['error' => 'Acceso no autorizado'], 401);
+        //return redirect()->guest(url('/'));
     }
 }

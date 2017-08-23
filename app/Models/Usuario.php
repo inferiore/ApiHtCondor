@@ -1,16 +1,16 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
-class Usuario extends Model 
+class Usuario extends Authenticatable 
 {
 
     protected $table = 'Usuarios';
     public $timestamps = true;
-    protected $fillable = array('nombre', 'sApellido', 'codigo', 'password', 'email');
-    protected $hidden = array('remember_token','password');
+    protected $fillable = array('nombre', 'sApellido', 'codigo', 'password', 'email','password');
+    protected $hidden = array('remember_token');
 
     public function scopeFilters($query,$datos){
     	if(isset($datos["nombre"])){

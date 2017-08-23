@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
 class UsuarioController extends Controller 
 {
 
@@ -75,7 +75,7 @@ class UsuarioController extends Controller
    */
   public function edit($id)
   {
-      $usuarios=$this->usuario->find($id);
+      $usuarios=$this->usuario->findOrFail($id);
        $data = ["usuario"=>$usuarios];
        return response()
       ->json(compact('data'));
@@ -89,9 +89,10 @@ class UsuarioController extends Controller
    */
   public function update(Request $request, $id)
   {
-   // dd($request->all());
-   $usuarios=$this->usuario->find($id);
+   
+   $usuarios=$this->usuario->findOrFail($id);
    $usuarios= $usuarios->fill($request->all());
+   $usuarios->password=Hash::make($usuarios->password);
        
         $usuarios->update();
 
