@@ -18,6 +18,7 @@ class CreateUsuariosTable extends Migration {
 			$table->string('email');
 			$table->timestamps();
 			$table->string('remember_token');
+			$table->string('api_token')->nullable();
 		});
 	}
 

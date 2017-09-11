@@ -18,16 +18,6 @@ class CreateForeignKeys extends Migration {
 						->onDelete('no action')
 						->onUpdate('no action');
 		});
-		Schema::table('Proyectos', function(Blueprint $table) {
-			$table->foreign('idUsuarioRegistro')->references('id')->on('Usuarios')
-						->onDelete('no action')
-						->onUpdate('no action');
-		});
-		Schema::table('Tareas', function(Blueprint $table) {
-			$table->foreign('idProyecto')->references('id')->on('Proyectos')
-						->onDelete('no action')
-						->onUpdate('no action');
-		});
 		Schema::table('Tareas', function(Blueprint $table) {
 			$table->foreign('idUsuarioRegistro')->references('id')->on('Usuarios')
 						->onDelete('no action')
@@ -57,12 +47,6 @@ class CreateForeignKeys extends Migration {
 		});
 		Schema::table('Herramientas', function(Blueprint $table) {
 			$table->dropForeign('Herramientas_idUsuarioRegistro_foreign');
-		});
-		Schema::table('Proyectos', function(Blueprint $table) {
-			$table->dropForeign('Proyectos_idUsuarioRegistro_foreign');
-		});
-		Schema::table('Tareas', function(Blueprint $table) {
-			$table->dropForeign('Tareas_idProyecto_foreign');
 		});
 		Schema::table('Tareas', function(Blueprint $table) {
 			$table->dropForeign('Tareas_idUsuarioRegistro_foreign');

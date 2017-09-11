@@ -58,7 +58,6 @@ class ApiAuthController extends Controller
      */
     public function authenticate(Request $request)
     {
-        //dd($request);
         $credentials = $request->only('codigo', 'password');
         
 
@@ -67,8 +66,9 @@ class ApiAuthController extends Controller
             $token = JWTAuth::attempt($credentials);
             
             if (!$token) {
-                return response()->json(['error' => 'invalid_credentials_'], 401);
+                return response()->json(['error' => 'invalid_credentials'], 401);
             }
+
         } catch (JWTException $e) {
 
            
@@ -82,7 +82,7 @@ class ApiAuthController extends Controller
         }
         // if no errors are encountered we can return a JWT
 
-
+        $user=Auth::user();
         return response()->json(compact('token','user'));
     }
 /*

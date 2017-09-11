@@ -9,7 +9,6 @@ class CreateTareasTable extends Migration {
 	{
 		Schema::create('Tareas', function(Blueprint $table) {
 			$table->increments('id');
-			$table->integer('idProyecto')->unsigned();
 			$table->string('nombre');
 			$table->string('descripcion');
 			$table->string('path');

@@ -51,24 +51,28 @@ class LdapServerConnection
                 $codigo =  $datos[$i]["uid"][0];
                 $correo = $datos[$i]["mail"][0];
             }
-
             $this->usuario = new Usuario();
-           
+            $this->usuario->id = $codigo;
             $this->usuario->codigo = $codigo;
             $this->usuario->password = $password;
-            $this->usuario->id = $codigo;
-             $this->usuario->nombre = $nombre;
-              $this->usuario->apellido = $nombre;
+            $this->usuario->nombre = $nombre;
+            $this->usuario->apellido = $nombre;
             $this->usuario->sApellido = $nombre;
             $this->usuario->email= $correo;
-             $this->usuario->idRol= 2;
+            $this->usuario->idRol= 2;
             $this->usuario->remember_token="No Aplica";
+           
             $usuario=Usuario::where("codigo",$codigo)->count();
+            
              if($usuario==0){
-            $this->usuario->password = "No Aplica";
-              $this->usuario->save();  
-             $this->usuario->password = $password; 
+                $this->usuario->password = "No Aplica";
+                $this->usuario->id = null;
+                $this->usuario->save();  
+                $this->usuario->password = $password; 
+                $this->usuario->id = $codigo;
+
             }
+            
 
 
             return true;
