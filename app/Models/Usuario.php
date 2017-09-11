@@ -3,13 +3,13 @@
 namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 class Usuario extends Authenticatable 
 {
 
     protected $table = 'Usuarios';
     public $timestamps = true;
-    protected $fillable = array('nombre', 'sApellido', 'codigo', 'password', 'email','password');
+    protected $fillable = array('nombre', 'sApellido','idRol', 'codigo', 'password', 'email','password');
     protected $hidden = array('remember_token');
 
     public function scopeFilters($query,$datos){

@@ -60,7 +60,7 @@ class ApiAuthController extends Controller
     {
         //dd($request);
         $credentials = $request->only('codigo', 'password');
-         $user= null;
+        
 
         try {
             // verify the credentials and create a token for the user
@@ -81,7 +81,8 @@ class ApiAuthController extends Controller
                 ], 500);
         }
         // if no errors are encountered we can return a JWT
-         
+
+
         return response()->json(compact('token','user'));
     }
 /*

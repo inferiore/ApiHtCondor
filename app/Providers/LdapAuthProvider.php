@@ -8,7 +8,9 @@
 
 namespace App\Providers;
 use App\Auth\LdapUserProvider;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+
 
 class LdapAuthProvider  extends ServiceProvider
 {
@@ -17,10 +19,18 @@ class LdapAuthProvider  extends ServiceProvider
     public function boot()
     {
 
+        $this->registerPolicies();
+        Auth::provider('ldap', function ($app, array $config) {
+            return new LdapUserProvider($app->make('App\Auth\LdapServerConnection'));
+        });
+        /*
+
         $this->app['auth']->extend('ldap',function()
         {
             return new LdapUserProvider();
         });
+        */
+
     }
 
     /**
