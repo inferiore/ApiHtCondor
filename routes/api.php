@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::get('estado', 'CondorController@index');
 Route::middleware('jwt.auth')->get('/user', function (Request $request) {
     return $request->user();
 });
