@@ -10,7 +10,8 @@ class Usuario extends Authenticatable
     protected $table = 'Usuarios';
     public $timestamps = true;
     protected $fillable = array('nombre', 'sApellido','idRol', 'codigo', 'password', 'email','password');
-    protected $hidden = array('remember_token');
+
+    protected $hidden = array('remember_token',"password");
 
     public function scopeFilters($query,$datos){
     	if(isset($datos["nombre"])){

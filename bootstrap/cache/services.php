@@ -30,6 +30,7 @@
     26 => 'App\\Providers\\EventServiceProvider',
     27 => 'App\\Providers\\RouteServiceProvider',
     28 => 'Tymon\\JWTAuth\\Providers\\JWTAuthServiceProvider',
+    29 => 'Barryvdh\\Cors\\ServiceProvider',
   ),
   'eager' => 
   array (
@@ -49,6 +50,7 @@
     13 => 'App\\Providers\\EventServiceProvider',
     14 => 'App\\Providers\\RouteServiceProvider',
     15 => 'Tymon\\JWTAuth\\Providers\\JWTAuthServiceProvider',
+    16 => 'Barryvdh\\Cors\\ServiceProvider',
   ),
   'deferred' => 
   array (
