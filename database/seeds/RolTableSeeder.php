@@ -11,16 +11,16 @@ class RolTableSeeder extends Seeder {
 
 		// Datos Necesarios
 		Rol::create(array(
-				'descripcion' => 'Rol para Admin',
-				'nombre' => 'Admin',
-				'estado' => 1
+				'observation' => 'Rol para Admin',
+				'name' => 'Admin',
+				'idState' => 1
 			));
 
 		// Datos Necesarios
 		Rol::create(array(
-				'descripcion' => 'Para Usuarios comunes',
-				'nombre' => 'User',
-				'estado' => 1
+				'observation' => 'Para Usuarios comunes',
+				'name' => 'User',
+				'idState' => 1
 			));
 	}
 }

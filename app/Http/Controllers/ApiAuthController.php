@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 //use App\Models\Permission;
 //use App\Models\Role;
-use App\Models\Usuario;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use JWTAuth;

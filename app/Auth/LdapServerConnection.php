@@ -8,7 +8,7 @@
 
 namespace App\Auth;
 
-use App\Models\Usuario;
+use App\Models\User;
 
 
 class LdapServerConnection
@@ -51,19 +51,15 @@ class LdapServerConnection
                 $codigo =  $datos[$i]["uid"][0];
                 $correo = $datos[$i]["mail"][0];
             }
-            $this->usuario = new Usuario();
+            $this->usuario = new user();
             $this->usuario->id = $codigo;
-            $this->usuario->codigo = $codigo;
+            $this->usuario->code = $codigo;
             $this->usuario->password = $password;
-            $this->usuario->nombre = $nombre;
-            $this->usuario->apellido = $nombre;
-            $this->usuario->sApellido = $nombre;
+            $this->usuario->fullName = $nombre;
             $this->usuario->email= $correo;
             $this->usuario->idRol= 2;
             $this->usuario->remember_token="No Aplica";
-           
-            $usuario=Usuario::where("codigo",$codigo)->count();
-            
+            $usuario=User::where("code",$codigo)->count();
              if($usuario==0){
                 $this->usuario->password = "No Aplica";
                 $this->usuario->id = null;
