@@ -10,7 +10,7 @@ class Tool extends Model
 
     protected $table = 'tools';
     public $timestamps = true;
-    protected $fillable = array('name','observation','algorithm','idState','idInsertUser');
+    protected $fillable = array('name','observation','algorithm','idState','idInsertUser','path');
 
     public function scopeFilters($query,$datos){
     	if(isset($datos["name"])){

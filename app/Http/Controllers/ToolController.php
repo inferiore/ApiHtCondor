@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tool;
+use App\Models\ToolState;
 use Illuminate\Http\Request;
 use  App\Http\Requests\ToolRequest;
 
@@ -16,14 +17,19 @@ class ToolController extends Controller
    */
 
   protected $herramienta;
+  protected $toolStates;
 
-  function __construct ( Tool $herramienta){
+
+  function __construct ( Tool $herramienta,ToolState $toolStates){
     $this->herramienta=$herramienta;
+    $this->toolStates=$toolStates;
+    
    }
   public function index(Request $request)
   {
     $herramientas = $this->herramienta->filters($request->all())->Index()->get();
-   $data = ["herramientas"=>$herramientas];
+    $toolStates=$this->toolStates->all();
+   $data = ["tools"=>$herramientas,'toolStates'=>$toolStates];
 
    return response()
       ->json(compact('data')); 
@@ -37,6 +43,11 @@ class ToolController extends Controller
    */
   public function create()
   {
+    $toolStates=$this->toolStates->all();
+    $data = ['toolStates'=>$toolStates];
+
+    return response()->json(compact('data')); 
+    
     
   }
 
@@ -47,14 +58,13 @@ class ToolController extends Controller
    */
   public function store(Request $request)
   {
-    
-    $herramientas=$this->herramienta;
-   
-    $herramientas=$herramientas->fill($request->all());
-    $this->herramienta->save();
-     $data = ["herramienta"=>$herramientas];
+
+    $herramienta=$this->herramienta->fill($request->all());
+    $herramienta->save();
+    $data = ["tool"=>$herramienta];
     return response()
       ->json(compact('data'));   
+
   }
 
   /**
@@ -76,8 +86,10 @@ class ToolController extends Controller
    */
   public function edit($id)
   {
-    $herramientas=$this->herramienta->find($id);
-       $data = ["herramienta"=>$herramientas];
+    $tool=$this->herramienta->find($id);
+    $states=$this->herramienta->all();
+    
+       $data = ["tool"=>$tool,'states'=>$states];
        return response()
       ->json(compact('data'));
   }
@@ -88,14 +100,11 @@ class ToolController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update($id,Request $request)
   {
     $herramientas=$this->herramienta->find($id);
     $herramientas= $herramientas->fill($request->all());
-       
-        $herramientas->update();
-
-           $data = ["herramienta"=>$herramientas];
+    $data = ["tool"=>$herramientas];
        return response()
       ->json(compact('data'));
   }
@@ -109,8 +118,7 @@ class ToolController extends Controller
   public function destroy($id)
   {
     $herramientas=$this->herramienta->findOrFail($id);
-  
-  $herramientas->delete();
+    $herramientas->delete();
   }
   
 }
