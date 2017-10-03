@@ -17,9 +17,9 @@ Route::middleware('jwt.auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 	Route::post('login', 'ApiAuthController@authenticate');
-	Route::resource('tools', 'ToolController');
 	
 	Route::group(['middleware' => ['jwt.auth']], function () {
+	Route::resource('tools', 'ToolController');
 	Route::resource('jobs', 'JobsController');
 	Route::resource('users', 'UsersController');
 	Route::resource('files', 'FilesController');
