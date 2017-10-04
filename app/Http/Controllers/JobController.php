@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
+
 use App\Models\JobState;
 use App\Models\Tool;
+use App\Models\Job;
+
 use Illuminate\Http\Request;
 class JobController extends Controller 
 {
@@ -18,18 +20,16 @@ class JobController extends Controller
   protected $states;
   protected $tools;
   
-  function __construct ( Job $jobs,JobState $states,Tool $tools){
+  function __construct (JobState $states,Job $jobs,Tool $tools){
     $this->jobs=$jobs;
     $this->states=$states;
     $this->tools=$tools;
-
-    
    }
 
   public function index(Request $request){
 
-   $jobs = $this->jobs->filters($request->all())->Index()->get();
-   $tools = $this->tools->where("idState",2)->get();
+   $jobs = $this->jobs->filters($request->all())->index()->get();
+   $tools = $this->tools->all();
    $states = $this->states->all();
    
    $data = ["jobs"=>$jobs,"tools"=>$tools,"states"=>$states];

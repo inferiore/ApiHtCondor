@@ -36,9 +36,11 @@ class Job extends Model
     		
     }
 
-    public public function spcopeIndex($query)
+     public function scopeIndex($query)
     {
-        $query->join("jobstate","jobstate.id","=","job.id")   
+        $query->join("jobstates","jobstates.id","=","jobs.idState")
+        ->select("jobs.*","jobstates.name as nameState","jobstates.class");
+        return $query;   
     }
 
 }
