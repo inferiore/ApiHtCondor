@@ -16,12 +16,13 @@ Route::get('status', 'CondorController@index');
 Route::middleware('jwt.auth')->get('/user', function (Request $request) {
     return $request->user();
 });
+	
 	Route::post('login', 'ApiAuthController@authenticate');
+	Route::resource('users', 'UserController');
 	
 	Route::group(['middleware' => ['jwt.auth']], function () {
-	Route::resource('jobs', 'JobController');
-	Route::resource('tools', 'ToolController');
-	Route::resource('users', 'UsersController');
-	Route::resource('files', 'FilesController');
-	Route::resource('roles', 'RolesController');
+		Route::resource('jobs', 'JobController');
+		Route::resource('tools', 'ToolController');
+		Route::resource('files', 'FilesController');
+		Route::resource('roles', 'RolesController');
 });	

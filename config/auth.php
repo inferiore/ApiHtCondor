@@ -60,14 +60,14 @@ return [
     | sources which represent each model / table. These sources may then
     | be assigned to any extra authentication guards you have defined.
     |
-    | Supported: "database", "eloquent"
+    | Supported: "database", "eloquent","ldap"
     |
     */
 
     'providers' => [
         'users' => [
-            'driver' => 'ldap',
-            //'model' => App\Models\Usuario::class,
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
         ],
 
         // 'users' => [

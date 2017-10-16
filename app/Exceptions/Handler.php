@@ -84,13 +84,13 @@ class Handler extends ExceptionHandler
         }
         
        
-        if(get_class($exception)=="ErrorException"){
+        // if(get_class($exception)=="ErrorException"){
 
-            return response([
-                    'error' => $exception->getMessage(),
-                    'debug' => $exception->getMessage()
-                ], 409);
-        }
+        //     return response([
+        //             'error' => $exception->getMessage(),
+        //             'debug' => $exception->getMessage()
+        //         ], 409);
+        // }
         // if($exception instanceof Exception)
         // {
         //     return response([

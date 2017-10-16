@@ -57,21 +57,20 @@ class ApiAuthController extends Controller
      * @return Response
      */
     public function authenticate(Request $request)
-    {
-        $credentials = $request->only('codigo', 'password');
-        
+    {   
+        //dd($request->all());
+
+        $credentials = $request->only('code', 'password');
 
         try {
             // verify the credentials and create a token for the user
             $token = JWTAuth::attempt($credentials);
-            
+                
             if (!$token) {
                 return response()->json(['error' => 'invalid_credentials'], 401);
             }
 
         } catch (JWTException $e) {
-
-           
 
             // something went wrong
             return response()->json(

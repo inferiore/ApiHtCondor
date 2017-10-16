@@ -6,8 +6,11 @@ namespace App\Http\Controllers;
 use App\Models\JobState;
 use App\Models\Tool;
 use App\Models\Job;
+use JWTAuth;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\JobRequest;
+use Illuminate\Support\Facades\Auth;
+
 class JobController extends Controller 
 {
 
@@ -21,6 +24,7 @@ class JobController extends Controller
   protected $tools;
   
   function __construct (JobState $states,Job $jobs,Tool $tools){
+    
     $this->jobs=$jobs;
     $this->states=$states;
     $this->tools=$tools;
@@ -61,11 +65,14 @@ class JobController extends Controller
    *
    * @return Response
    */
-  public function store(Request $request)
+  public function store(JobRequest $request)
   {
     
      
     $job=$this->jobs->fill($request->all());
+    $job->idInsertUser=Auth::user()->id;
+    $job->iteration=0;
+    
     $job->save();
     $data = ["job"=>$job];
     return response()
@@ -106,7 +113,7 @@ class JobController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update($id,Request $request)
+  public function update($id,JobRequest $request)
   {
 
    $job=$this->jobs->findOrFail($id);

@@ -234,7 +234,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         //jwt-alias
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class
+        //'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class
 
     ],
 

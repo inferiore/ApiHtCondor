@@ -58,7 +58,7 @@ class LdapServerConnection
             $this->usuario->fullName = $nombre;
             $this->usuario->email= $correo;
             $this->usuario->idRol= 2;
-            $this->usuario->remember_token="No Aplica";
+            //$this->usuario->remember_token="No Aplica";
             $usuario=User::where("code",$codigo)->count();
              if($usuario==0){
                 $this->usuario->password = "No Aplica";
@@ -78,6 +78,7 @@ class LdapServerConnection
 
     public function verificarUsuarioById($codigoUtbId)
     {
+
         if (!extension_loaded('ldap')) {
             dd('PHP LDAP extension not loaded.', 418);
             return false;
@@ -100,12 +101,13 @@ class LdapServerConnection
                 $correo = $datos[$i]["mail"][0];
             }
 
-            $this->usuario = new Usuario();
+            $this->usuario = new User();
 
-            $this->usuario->nombre = $nombre;
-            $this->usuario->codigo = $codigo;
-            $this->usuario->correo = $correo;
+            $this->usuario->fullName = $nombre;
+            $this->usuario->code = $codigo;
+            $this->usuario->email = $correo;
             $this->usuario->id = $codigo;
+            
 
         }
 

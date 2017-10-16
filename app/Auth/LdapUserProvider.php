@@ -13,14 +13,13 @@ use App\Models\Usuario;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
-
+use JWTAuth;
 
 class LdapUserProvider implements UserProvider
 {
     public function __construct()
     {
         $this->conect = new LdapServerConnection();
-
     }
 
     /**
@@ -30,8 +29,14 @@ class LdapUserProvider implements UserProvider
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveById($identifier)
-    {
-        if ($usuario= $this->conect->verificarUsuarioById($identifier)) {
+    {   
+        // $token=JWTAuth::getToken();
+        // dd("token:"+$token);
+        // JWTAuth::toUser($token);
+
+        // print($identifier);
+        // dd("llego");
+         if ($usuario= $this->conect->verificarUsuarioById($identifier)) {
 
             return $usuario;
         }
@@ -72,8 +77,8 @@ class LdapUserProvider implements UserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
-
-        if ($this->conect->verificarUsuario($credentials['codigo'], $credentials['password'])) {
+        
+        if ($this->conect->verificarUsuario($credentials['code'], $credentials['password'])) {
             $user = $this->conect->getUsuario();
 
             return $user;
@@ -91,7 +96,7 @@ class LdapUserProvider implements UserProvider
      */
     public function validateCredentials(Authenticatable $user, array $credentials)
     {
-        if ($user->getAuthIdentifier()==$credentials['codigo']&& $user->getAuthPassword()==$credentials['password']){
+        if ($user->getAuthIdentifier()==$credentials['code']&& $user->getAuthPassword()==$credentials['password']){
 
             return true;
         }

@@ -11,7 +11,7 @@ class User extends Authenticatable
     public $timestamps = true;
     protected $fillable = array('fullName','idRol', 'code', 'password', 'email');
 
-    protected $hidden = array('remember_token',"password");
+    protected $hidden = array('remember_token');
 
     public function scopeFilters($query,$datos){
     	if(isset($datos["fullname"])){
@@ -24,9 +24,8 @@ class User extends Authenticatable
                 $query->where("idRol",$datos["idRol"]);
             }
         }
-        
     	if(isset($datos["code"])){
-    		$query->where("codigo",'like',"%".$datos["codigo"]."%");
+    		$query->where("code",'like',"%".$datos["code"]."%");
     	}
     	
     	if(isset($datos["email"])){

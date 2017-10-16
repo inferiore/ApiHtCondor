@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Tool;
 use App\Models\ToolState;
-use Illuminate\Http\Request;
+use Illuminate\Http\ToolRequest;
 use  App\Http\Requests\ToolRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ToolController extends Controller 
 {
@@ -56,10 +57,11 @@ class ToolController extends Controller
    *
    * @return Response
    */
-  public function store(Request $request)
+  public function store(ToolRequest $request)
   {
 
     $herramienta=$this->herramienta->fill($request->all());
+    $herramienta->idInsertUser=Auth::user()->id;    
     $herramienta->save();
     $data = ["tool"=>$herramienta];
     return response()
@@ -100,7 +102,7 @@ class ToolController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update($id,Request $request)
+  public function update($id,ToolRequest $request)
   {
     $herramientas=$this->herramienta->find($id);
     $herramientas= $herramientas->fill($request->all());
