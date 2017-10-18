@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Tool;
 use App\Models\ToolState;
 use Illuminate\Http\ToolRequest;
-use  App\Http\Requests\ToolRequest;
+use  App\Http\Requests\Request;
+use  Validaciones\ToolRequest;
 use Illuminate\Support\Facades\Auth;
 
 class ToolController extends Controller 

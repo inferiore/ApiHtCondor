@@ -7,8 +7,8 @@ use App\Models\JobState;
 use App\Models\Tool;
 use App\Models\Job;
 use JWTAuth;
-
-use Illuminate\Http\JobRequest;
+use Illuminate\Http\Request;
+use Validaciones\JobRequest;
 use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller 
@@ -50,7 +50,7 @@ class JobController extends Controller
    */
   public function create()
   {
-  $tools = $this->tools->where("idState",2)->get();
+  $tools = $this->tools->all();//->where("idState",2)->get();
    $states = $this->states->all();
    
    $data = ["tools"=>$tools,"states"=>$states];
@@ -70,6 +70,7 @@ class JobController extends Controller
     
      
     $job=$this->jobs->fill($request->all());
+    $job->name=Auth::user()->code."-".$job->name;
     $job->idInsertUser=Auth::user()->id;
     $job->iteration=0;
     
@@ -100,7 +101,7 @@ class JobController extends Controller
   public function edit($id)
   {
       $job=$this->jobs->findOrFail($id);
-      $tools = $this->tools->where("idState",2)->get();
+      $tools = $this->tools->all();//where("idState",2)->get();
       $states = $this->states->all();
        $data = ["job"=>$job,"tools"=>$tools,"states"=>$states];
        
@@ -118,7 +119,7 @@ class JobController extends Controller
 
    $job=$this->jobs->findOrFail($id);
    $job= $job->fill($request->all());
-       
+    $job->name=Auth::user()->code."-".$job->name;       
         $job->update();
 
            $data = ["job"=>$job];

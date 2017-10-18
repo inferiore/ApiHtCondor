@@ -2,7 +2,7 @@
 
 namespace Validaciones;
 
-class ToolRequest extends ApiRequest
+class JobRequest extends ApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +23,15 @@ class ToolRequest extends ApiRequest
     {
 
         return [
-                'name' => 'required',
+                'name' => 'required'
+                /*,
                 'observation' => 'required',
                 'algorithm' => 'required',
                 'outPut' => 'required',
                 'submitCondor' => 'required',
                 'idState' => 'required',
                 'iteracion' => 'required'
-                    
+                  */  
         ];  
     }
  //     public function messages()
