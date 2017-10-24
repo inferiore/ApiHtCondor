@@ -29,8 +29,9 @@ class LdapUserProvider implements UserProvider
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveById($identifier)
-    {   
-         if ($usuario= $this->conect->verificarUsuarioById($identifier)) {
+    {  
+        $code=\App\Models\User::find($identifier)->code;
+         if ($usuario= $this->conect->verificarUsuarioById($code)) {
             return $usuario;
         }
     }
