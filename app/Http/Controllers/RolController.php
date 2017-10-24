@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Rol;
 use Illuminate\Http\Request;
+use Validaciones\RolRequest;
+
 
 class RolController extends Controller 
 {
@@ -43,13 +45,12 @@ class RolController extends Controller
    *
    * @return Response
    */
-  public function store(Request $request)
+  public function store(RolRequest $request)
   {
     
-     
     $roles=$this->rol;
-   
     $roles=$roles->fill($request->all());
+    $this->rol->idState=1;
     $this->rol->save();
      $data = ["rol"=>$roles];
     return response()
@@ -88,15 +89,12 @@ class RolController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update(Request $request, $id)
+  public function update(RolRequest $request, $id)
   {
-   // dd($request->all());
    $roles=$this->rol->find($id);
    $roles= $roles->fill($request->all());
-       
-        $roles->update();
-
-           $data = ["rol"=>$roles];
+   $roles->update();
+    $data = ["rol"=>$roles];
        return response()
       ->json(compact('data'));
     

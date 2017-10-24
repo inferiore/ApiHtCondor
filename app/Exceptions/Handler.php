@@ -89,7 +89,7 @@ class Handler extends ExceptionHandler
         //     return response([
         //             'error' => $exception->getMessage(),
         //             'debug' => $exception->getMessage()
-        //         ], 409);
+        //         ], 500);
         // }
         // if($exception instanceof Exception)
         // {

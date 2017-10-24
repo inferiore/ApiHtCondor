@@ -23,6 +23,6 @@ Route::middleware('jwt.auth')->get('/user', function (Request $request) {
 	Route::group(['middleware' => ['jwt.auth']], function () {
 		Route::resource('jobs', 'JobController');
 		Route::resource('tools', 'ToolController');
-		Route::resource('files', 'FilesController');
-		Route::resource('roles', 'RolesController');
+		Route::resource('files', 'FileController');
+		Route::resource('roles', 'RolController');
 });	

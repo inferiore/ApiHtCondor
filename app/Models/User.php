@@ -10,8 +10,8 @@ class User extends Authenticatable
     protected $table = 'users';
     public $timestamps = true;
     protected $fillable = array('fullName','idRol', 'code', 'password', 'email');
-
-    protected $hidden = array('remember_token');
+    
+    protected $hidden = array('remember_token','password');
 
     public function scopeFilters($query,$datos){
     	if(isset($datos["fullname"])){
@@ -39,6 +39,11 @@ class User extends Authenticatable
         
     }
 
+    public function getAuthIdentifier()
+    {
+        return strtoupper($this->code);
+
+    }
 
 
 

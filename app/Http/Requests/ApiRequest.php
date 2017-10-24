@@ -14,7 +14,7 @@ class ApiRequest extends FormRequest
     {    
         $respuesta = [   
                         'status'  => 'Bad Request',
-                        'errors'  => $errors
+                        'error'  => $errors
                     ];
          return response($respuesta, 400);
     }

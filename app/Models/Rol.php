@@ -20,7 +20,6 @@ class Rol extends Model
             $query->whereIn("idState",$datos["idState"]);
             else
             $query->where("idState",$datos["idState"]);
-                
         }
         
     	

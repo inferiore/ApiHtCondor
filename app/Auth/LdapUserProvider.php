@@ -30,14 +30,7 @@ class LdapUserProvider implements UserProvider
      */
     public function retrieveById($identifier)
     {   
-        // $token=JWTAuth::getToken();
-        // dd("token:"+$token);
-        // JWTAuth::toUser($token);
-
-        // print($identifier);
-        // dd("llego");
          if ($usuario= $this->conect->verificarUsuarioById($identifier)) {
-
             return $usuario;
         }
     }
@@ -80,10 +73,8 @@ class LdapUserProvider implements UserProvider
         
         if ($this->conect->verificarUsuario($credentials['code'], $credentials['password'])) {
             $user = $this->conect->getUsuario();
-
             return $user;
         }
-
         return null;
     }
 
@@ -95,7 +86,7 @@ class LdapUserProvider implements UserProvider
      * @return bool
      */
     public function validateCredentials(Authenticatable $user, array $credentials)
-    {
+    {   
         if ($user->getAuthIdentifier()==$credentials['code']&& $user->getAuthPassword()==$credentials['password']){
 
             return true;

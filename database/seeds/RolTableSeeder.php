@@ -7,7 +7,7 @@ class RolTableSeeder extends Seeder {
 
 	public function run()
 	{
-		//DB::table('Roles')->delete();
+		//DB::table('roles')->delete();
 
 		// Datos Necesarios
 		Rol::create(array(

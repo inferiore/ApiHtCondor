@@ -7,7 +7,7 @@ class JobTableSeeder extends Seeder {
 
 	public function run()
 	{
-		//DB::table('Jobs')->delete();
+		//DB::table('jobs')->delete();
 
 		// data init
 		Job::create(array(
@@ -18,7 +18,8 @@ class JobTableSeeder extends Seeder {
 				'submitCondor' => 'lg.submit',
 				'idState' => 2,
 				'idInsertUser' => 1,
-				'iteracion' => 1
+				'iteracion' => 1,
+				'idTool' => 1
 			));
 
 		// data init
@@ -30,7 +31,8 @@ class JobTableSeeder extends Seeder {
 				'submitCondor' => 'NaiveBayesClassification.submit',
 				'idState' => '2',
 				'idInsertUser' => 1,
-				'iteracion' => 2
+				'iteracion' => 2,
+				'idTool' => 1
 			));
 	}
 }

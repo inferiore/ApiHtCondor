@@ -9,8 +9,8 @@ class Job extends Model
 
     protected $table = 'jobs';
     public $timestamps = true;
-    protected $fillable = array('name', 'observation', 'algorithm', 'outPut','submitCondor','idState','idInsertUser','iteracion');
-
+    protected $fillable = array('name', 'observation', 'algorithm', 'outPut','submitCondor','idState','idTool','idInsertUser','iteracion');
+    public static $path="";
     public function scopeFilters($query,$datos){
 
     	if(isset($datos["name"])){
@@ -26,9 +26,9 @@ class Job extends Model
     	
     	if(isset($datos["idState"])){
             if(is_array($datos["idState"]))
-                $query->whereIn("idState",$datos["pathResultLog"]);
+                $query->whereIn("idState",$datos["idState"]);
             else
-                $query->where("idState",$datos["pathResultLog"]);
+                $query->where("idState",$datos["idState"]);
                 
         	}
     	

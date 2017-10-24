@@ -24,14 +24,6 @@ class JobRequest extends ApiRequest
 
         return [
                 'name' => 'required'
-                ,
-                'observation' => 'required',
-                'algorithm' => 'required',
-                'outPut' => 'required',
-                'submitCondor' => 'required',
-                'idState' => 'required',
-                'iteracion' => 'required'
-                  
         ];  
     }
 }

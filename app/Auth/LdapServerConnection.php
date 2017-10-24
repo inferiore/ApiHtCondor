@@ -52,23 +52,19 @@ class LdapServerConnection
                 $correo = $datos[$i]["mail"][0];
             }
             $this->usuario = new user();
-            $this->usuario->id = $codigo;
             $this->usuario->code = $codigo;
             $this->usuario->password = $password;
             $this->usuario->fullName = $nombre;
             $this->usuario->email= $correo;
             $this->usuario->idRol= 2;
-            //$this->usuario->remember_token="No Aplica";
-            $usuario=User::where("code",$codigo)->count();
-             if($usuario==0){
-                $this->usuario->password = "No Aplica";
-                $this->usuario->id = null;
-                $this->usuario->save();  
-                $this->usuario->password = $password; 
-                $this->usuario->id = $codigo;
+            $usuario=User::where("code",$codigo)->first();
 
+             if(is_null($usuario)){
+                $this->usuario->save();  
+            }else{
+                $this->usuario=$usuario;
+                 
             }
-            
 
 
             return true;
@@ -111,13 +107,12 @@ class LdapServerConnection
 
         }
 
-        // dd($this->usuario);
-
         return $this->usuario;
     }
 
     public function getUsuario()
-    {
+    {   
+
         return $this->usuario;
     }
 

@@ -7,7 +7,7 @@ class ToolTableSeeder extends Seeder {
 
 	public function run()
 	{
-		//DB::table('Tools')->delete();
+		//DB::table('tools')->delete();
 
 		// data init
 		Tool::create(array(

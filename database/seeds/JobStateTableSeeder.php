@@ -18,7 +18,7 @@ class JobStateTableSeeder extends Seeder {
 		// data init
 		JobState::create(array(
 				'name' => 'running',
-				'class' =>'info'
+				'class' => 'info'
 			));
 
 		// data init

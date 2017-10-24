@@ -32,12 +32,5 @@ class UserRequest extends ApiRequest
                 'password' => 'required'
         ];
     }
-     public function messages()
- {
-     return [
-         'nombre.required' => 'El campo nombre es requerido!',
-         'clase.required' => 'El campo clase es requerido!',
-  
-     ];
- }
+ 
 }
