@@ -75,13 +75,22 @@ class Handler extends ExceptionHandler
                     'debug' => $exception->getMessage()
                 ], 409);
         }
-        if($exception instanceof ErrorException)
-        {
-            return response([
-                    'error' => 'La petici&oacute;n del navegador no se ha podido completar porque se ha producido un error en la consulta.',
-                    'debug' => $exception->getMessage()
-                ], 409);
-        }
+        // if($exception instanceof ErrorException)
+        // {
+        //     return response([
+        //             'error' => 'La petici&oacute;n del navegador no se ha podido completar porque se ha producido un error en la consulta.',
+        //             'debug' => $exception->getMessage()
+        //         ], 409);
+        // }
+        // if($exception instanceof Exception)
+        // {
+        //     return response([
+        //             'error' => 'La petici&oacute;n del navegador no se ha podido completar porque se ha producido un error en la consulta.',
+        //             'debug' => $exception->getMessage()
+        //         ], 409);
+        // }
+        
+        
         
        
         // if(get_class($exception)=="ErrorException"){

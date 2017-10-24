@@ -17,7 +17,7 @@ class CreateJobsTable extends Migration {
 			$table->integer('idState')->unsigned();
 			$table->integer('idInsertUser')->unsigned();
 			$table->timestamps();
-			$table->integer('iteracion')->default('0');
+			$table->integer('iteration')->default('0');
 			$table->integer('idTool')->unsigned();
 		});
 	}

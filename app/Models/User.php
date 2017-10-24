@@ -42,7 +42,6 @@ class User extends Authenticatable
     public function getAuthIdentifier()
     {
         return strtoupper($this->code);
-
     }
 
 

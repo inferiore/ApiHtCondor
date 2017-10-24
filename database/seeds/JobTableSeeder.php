@@ -16,9 +16,9 @@ class JobTableSeeder extends Seeder {
 				'algorithm' => 'lg.py',
 				'outPut' => 'lg.log',
 				'submitCondor' => 'lg.submit',
-				'idState' => 2,
+				'idState' => 1,
 				'idInsertUser' => 1,
-				'iteracion' => 1,
+				'iteration' => 1,
 				'idTool' => 1
 			));
 
@@ -29,9 +29,9 @@ class JobTableSeeder extends Seeder {
 				'algorithm' => 'NaiveBayesClassification.py',
 				'outPut' => 'NaiveBayesClassification.py',
 				'submitCondor' => 'NaiveBayesClassification.submit',
-				'idState' => '2',
+				'idState' => '1',
 				'idInsertUser' => 1,
-				'iteracion' => 2,
+				'iteration' => 2,
 				'idTool' => 1
 			));
 	}

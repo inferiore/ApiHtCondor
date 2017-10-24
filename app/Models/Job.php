@@ -9,8 +9,8 @@ class Job extends Model
 
     protected $table = 'jobs';
     public $timestamps = true;
-    protected $fillable = array('name', 'observation', 'algorithm', 'outPut','submitCondor','idState','idTool','idInsertUser','iteracion');
-    public static $path="";
+    protected $fillable = array('name', 'observation', 'algorithm', 'outPut','submitCondor','idState','idTool');
+  
     public function scopeFilters($query,$datos){
 
     	if(isset($datos["name"])){

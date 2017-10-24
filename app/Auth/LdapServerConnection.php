@@ -98,12 +98,12 @@ class LdapServerConnection
             }
 
             $this->usuario = new User();
-
             $this->usuario->fullName = $nombre;
             $this->usuario->code = $codigo;
             $this->usuario->email = $correo;
-            $this->usuario->id = $codigo;
-            
+            $this->usuario->id=User::where("code",$codigo)->first()->id;
+
+
 
         }
 

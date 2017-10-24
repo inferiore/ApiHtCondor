@@ -10,6 +10,8 @@ use JWTAuth;
 use Illuminate\Http\Request;
 use Validaciones\JobRequest;
 use Illuminate\Support\Facades\Auth;
+use Storage;
+use Exception;
 
 class JobController extends Controller 
 {
@@ -50,6 +52,8 @@ class JobController extends Controller
    */
   public function create()
   {
+
+
   $tools = $this->tools->all();//->where("idState",2)->get();
    $states = $this->states->all();
    
@@ -68,13 +72,18 @@ class JobController extends Controller
   public function store(JobRequest $request)
   {
     
-     
     $job=$this->jobs->fill($request->all());
+
     $job->name=Auth::user()->code."-".$job->name;
     $job->idInsertUser=Auth::user()->id;
-    $job->iteration=0;
-    
+    $job->iteration=1;
+    $job->algorithm=$request->file('algorithm')->getClientOriginalName();
     $job->save();
+    $path = $request->file('algorithm')
+    ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
+              ,$request->file('algorithm')->getClientOriginalName(),"jobs");
+   
+     
     $data = ["job"=>$job];
     return response()
       ->json(compact('data'));  
@@ -119,9 +128,13 @@ class JobController extends Controller
 
    $job=$this->jobs->findOrFail($id);
    $job= $job->fill($request->all());
-    $job->name=Auth::user()->code."-".$job->name;       
-        $job->update();
+    $job->name=Auth::user()->code."-".$job->name;   
+    $job->algorithm=$request->file('algorithm')->getClientOriginalName();
+    $path = $request->file('algorithm')
+    ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
+              ,$request->file('algorithm')->getClientOriginalName(),"jobs");
 
+    $job->update();
            $data = ["job"=>$job];
        return response()
       ->json(compact('data'));
@@ -139,6 +152,13 @@ class JobController extends Controller
     $job=$this->jobs->findOrFail($id);
     $job->delete();
   }
+
+  public function submit($id){
+
+    //make.submit
+
+  }
+
   
 }
 
