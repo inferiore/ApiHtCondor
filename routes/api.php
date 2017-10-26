@@ -22,6 +22,12 @@ Route::middleware('jwt.auth')->get('/user', function (Request $request) {
 	
 	Route::group(['middleware' => ['jwt.auth']], function () {
 		Route::resource('jobs', 'JobController');
+
+		Route::post('jobs/changeAlgorithm/{id}', 'JobController@changeAlgorithm');
+		Route::get('jobs/downloadAlgorithm/{id}', 'JobController@downloadAlgorithm');
+		Route::post('jobs/sendJob/{id}', 'JobController@sendJob');
+		Route::get('jobs/showSubmit/{id}', 'JobController@showSubmit');
+	
 		Route::resource('tools', 'ToolController');
 		Route::resource('files', 'FileController');
 		Route::resource('roles', 'RolController');

@@ -22,12 +22,26 @@ class JobRequest extends ApiRequest
     public function rules()
     {
 
-        return [
-                'name' => 'required',
-                'algorithm' => 'required|file',
-                'outPut' => 'required',
-                'submitCondor' => 'required',
-                'idState' => 'required'
-        ];  
+         switch ($this->method()) {
+            case 'PUT':
+                return 
+                [
+                    'name' => 'required',
+                    'outPut' => 'required',
+                    'submitCondor' => 'required',
+                    'idState' => 'required'
+                ];  
+            case 'POST':
+               return
+                [
+                    'name' => 'required',
+                    'algorithm' => 'required|file',
+                    'outPut' => 'required',
+                    'submitCondor' => 'required',
+                    'idState' => 'required'
+                ];  
+            default: break;
+
+        
     }
 }

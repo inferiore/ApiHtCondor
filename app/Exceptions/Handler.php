@@ -109,6 +109,15 @@ class Handler extends ExceptionHandler
         //         ], 500);
         // }
         
+        if(get_class($exception)== "Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException")
+        {
+            return response([
+                    'status' => 'Internal Server Error',
+                    'error' => 'La solicitud del navegador no se ha podido completar porque se ha producido un error inesperado en el servidor.',
+                    'error' => $exception
+                ], 500);
+        }
+        
         return parent::render($request, $exception);
     }
     /**

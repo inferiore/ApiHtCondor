@@ -8,11 +8,11 @@ use App\Models\Tool;
 use App\Models\Job;
 use JWTAuth;
 use Illuminate\Http\Request;
-use Validaciones\JobRequest;
+//use Validaciones\JobRequest;
 use Illuminate\Support\Facades\Auth;
 use Storage;
 use Exception;
-
+use Carbon\Carbon;
 class JobController extends Controller 
 {
 
@@ -69,7 +69,7 @@ class JobController extends Controller
    *
    * @return Response
    */
-  public function store(JobRequest $request)
+  public function store(Request $request)
   {
     
     $job=$this->jobs->fill($request->all());
@@ -79,7 +79,7 @@ class JobController extends Controller
     $job->iteration=1;
     $job->algorithm=$request->file('algorithm')->getClientOriginalName();
     $job->save();
-    $path = $request->file('algorithm')
+    $request->file('algorithm')
     ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
               ,$request->file('algorithm')->getClientOriginalName(),"jobs");
    
@@ -123,17 +123,12 @@ class JobController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update($id,JobRequest $request)
+  public function update($id,Request $request)
   {
 
    $job=$this->jobs->findOrFail($id);
    $job= $job->fill($request->all());
-    $job->name=Auth::user()->code."-".$job->name;   
-    $job->algorithm=$request->file('algorithm')->getClientOriginalName();
-    $path = $request->file('algorithm')
-    ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
-              ,$request->file('algorithm')->getClientOriginalName(),"jobs");
-
+   $job->name=Auth::user()->code."-".$job->name;   
     $job->update();
            $data = ["job"=>$job];
        return response()
@@ -153,12 +148,79 @@ class JobController extends Controller
     $job->delete();
   }
 
-  public function submit($id){
+  public function showSubmit($id){
+    $job=$this->jobs->findOrFail($id);    
+    $textFile="executable = ".$job->algorithm
+    ."\nuniverse = vanilla"
+    ."\nlog = log"
+    ."\noutput = ".$job->outPut
+    ."\nQueue";
+    //verify that the algorithm exist,
+    // if not exist so the algorithm must be created equal that the algorithm in before iteration
+    $exists = Storage::disk('jobs')->exists('job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
 
-    //make.submit
+    if(!$exists){
+      $exists = Storage::disk('jobs')
+      ->copy('job-'.$job->id."/iteracion-".($job->iteration-1)."/".$job->algorithm,
+        'job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
+    }
+    //create a .submit base
+    Storage::disk('jobs')->put('job-'.$job->id."/iteracion-".$job->iteration."/".$job->submitCondor, $textFile);
+    $textSubmitCondor=Storage::disk('jobs')->get(
+      '/job-'.$job->id."/iteracion-".$job->iteration."/".$job->submitCondor);
+    return response()
+      ->json(compact('textSubmitCondor'));
+
+
 
   }
+  public function sendJob($id,Request $request){
+    $job=$this->jobs->findOrFail($id);
+    $job->iteration=$job->iteration+1;
+    $job->idState=2;
+    Storage::disk('jobs')->put('job-'.$job->id."/iteracion-".$job->iteration."/".$job->submitCondor, $request->get("textFile"));
+    $job->save();
 
+   return response()
+      ->json("msj"=>"job send successful");
+  
+  }
+
+  public function cancelJob($id){
+    $job=$this->jobs->findOrFail($id);
+    $job->idState=1;
+    $job->save();
+    return response()
+      ->json("msj"=>"job canceled successful");
+  
+  }
+  
+
+  public function changeAlgorithm($id, Request $request){
+
+    $job=$this->jobs->findOrFail($id)->fill($request->all());
+
+    //the before file must be deleted
+    Storage::disk("jobs")->delete('job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
+
+    $job->algorithm=$request->file('algorithm')->getClientOriginalName();
+    //save the new file on disk
+    $request->file('algorithm')
+    ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
+              ,$request->file('algorithm')->getClientOriginalName(),"jobs");
+    $data = ["job"=>$job];
+   $job->save();
+       return response()->json(compact('data','path'));
+  }
+
+  public function downloadAlgorithm($id){
+    $job=$this->jobs->findOrFail($id);
+     $file=Storage::disk('jobs')->getDriver()
+     ->getAdapter()
+     ->applyPathPrefix("/job-".$id."/iteracion-".$job->iteration."/".$job->algorithm);
+    return response()->download($file);
+
+  }
   
 }
 
