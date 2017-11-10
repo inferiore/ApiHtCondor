@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\JobState;
 use App\Models\Tool;
 use App\Models\Job;
+use App\Models\File;
 use JWTAuth;
 use Illuminate\Http\Request;
 //use Validaciones\JobRequest;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Storage;
 use Exception;
 use Carbon\Carbon;
+
 class JobController extends Controller 
 {
 
@@ -24,12 +26,16 @@ class JobController extends Controller
   protected $jobs;
   protected $states;
   protected $tools;
+  protected $file;
   
-  function __construct (JobState $states,Job $jobs,Tool $tools){
+  
+  function __construct (JobState $states,Job $jobs,Tool $tools,File $file){
     
     $this->jobs=$jobs;
     $this->states=$states;
     $this->tools=$tools;
+    $this->file=$file;
+    
    }
 
   public function index(Request $request){
@@ -155,15 +161,7 @@ class JobController extends Controller
     ."\nlog = log"
     ."\noutput = ".$job->outPut
     ."\nQueue";
-    //verify that the algorithm exist,
-    // if not exist so the algorithm must be created equal that the algorithm in before iteration
-    $exists = Storage::disk('jobs')->exists('job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
 
-    if(!$exists){
-      $exists = Storage::disk('jobs')
-      ->copy('job-'.$job->id."/iteracion-".($job->iteration-1)."/".$job->algorithm,
-        'job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
-    }
     //create a .submit base
     Storage::disk('jobs')->put('job-'.$job->id."/iteracion-".$job->iteration."/".$job->submitCondor, $textFile);
     $textSubmitCondor=Storage::disk('jobs')->get(
@@ -179,10 +177,29 @@ class JobController extends Controller
     $job->iteration=$job->iteration+1;
     $job->idState=2;
     Storage::disk('jobs')->put('job-'.$job->id."/iteracion-".$job->iteration."/".$job->submitCondor, $request->get("textFile"));
-    $job->save();
+    //before send the job to server  all files in actual iteration folder  must be copied to  new  iteration folder
+    //i must be sure that  all files are copied, for reduce probability error in next iteration
+    try{
+        //1.copy algoritm
+      $exists = Storage::disk('jobs')
+      ->copy('job-'.$job->id."/iteracion-".($job->iteration-1)."/".$job->algorithm,
+      'job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
+      //2. copy parameters
+       $files=$this->file->where("idJob",$job->id)->get(); 
+      foreach ($files as $value) {
+        Storage::disk('jobs')
+        ->copy('job-'.$job->id."/iteracion-".($job->iteration-1)."/".$value->realname,
+        'job-'.$job->id."/iteracion-".$job->iteration."/".$value->realname);
+      }
+    } catch (Exception $e){
+      throw new Exception("some files not was copied, please contact support", 1);
+    }
+     $job->save();
 
-   return response()
-      ->json("msj"=>"job send successful");
+
+
+
+   return response()->json(["msj"=>"job send successful"]);
   
   }
 
@@ -191,7 +208,7 @@ class JobController extends Controller
     $job->idState=1;
     $job->save();
     return response()
-      ->json("msj"=>"job canceled successful");
+      ->json(["msj"=>"job send successful"]);
   
   }
   

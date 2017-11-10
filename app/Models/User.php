@@ -39,10 +39,21 @@ class User extends Authenticatable
         
     }
 
-    public function getAuthIdentifier()
+    // public function getAuthIdentifier()
+    // {
+    //     return strtoupper($this->code);
+    // }
+    
+
+
+    public function getCode()
     {
-        return strtoupper($this->code);
+
+        //Auth::user()->getCode();
+
+        return "T00030535";
     }
+
 
 
 

@@ -9,7 +9,7 @@ class File extends Model
 
     protected $table = 'files';
     public $timestamps = true;
-    protected $fillable = array('realname','fullPath','idJob');
+    protected $fillable = array('realname','idJob');
 
     public function scopeFilters($query,$datos){
     	if(isset($datos["fullPath"])){
@@ -17,7 +17,7 @@ class File extends Model
     	}
         if(isset($datos["idJob"])){
             if(is_array($datos["idJob"]))
-                $query->whereIn("idJob",$datos["path"])
+                $query->whereIn("idJob",$datos["path"]);
             else
                 $query->where("idJob",$datos["idJob"]);
         }
@@ -25,5 +25,6 @@ class File extends Model
     	return $query;
     		
     }
+
 
 }
