@@ -130,5 +130,25 @@ class FileController extends Controller
     $data = ["ok"=>"deleted"];
   return response()->json(compact('data'));
   }
+
+ /**
+   * donwload the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return Response
+   */
+  public function donwload($id)
+  {
+    //the before file must be deleted
+    $file=$this->file->findOrFail($id);
+    $job=$this->job->findOrFail($file->idJob);
+    $file=Storage::disk('jobs')->getDriver()
+     ->getAdapter()
+     ->applyPathPrefix("/job-".$job->id."/iteracion-".$job->iteration."/".$file->realname);
+
+    return response()->download($file);
+
+  }
+   
 }
 ?>

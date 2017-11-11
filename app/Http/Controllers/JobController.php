@@ -219,6 +219,7 @@ class JobController extends Controller
 
     //the before file must be deleted
     Storage::disk("jobs")->delete('job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
+    
 
     $job->algorithm=$request->file('algorithm')->getClientOriginalName();
     //save the new file on disk
