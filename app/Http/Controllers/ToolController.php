@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Tool;
 use App\Models\ToolState;
-use Illuminate\Http\ToolRequest;
-use  App\Http\Requests\Request;
-use  Validaciones\ToolRequest;
+use Illuminate\Http\Request;
+use Validaciones\ToolRequest;
 use Illuminate\Support\Facades\Auth;
 
 class ToolController extends Controller 
@@ -90,13 +89,10 @@ class ToolController extends Controller
   public function edit($id)
   {
     $tool=$this->herramienta->find($id);
-    $states=$this->herramienta->all();
-    
-       $data = ["tool"=>$tool,'states'=>$states];
-       return response()
-      ->json(compact('data'));
+    $states=$this->toolStates->all();
+    $data = ["tool"=>$tool,'states'=>$states];
+    return response()->json(compact('data'));
   }
-
   /**
    * Update the specified resource in storage.
    *
@@ -108,8 +104,7 @@ class ToolController extends Controller
     $herramientas=$this->herramienta->find($id);
     $herramientas= $herramientas->fill($request->all());
     $data = ["tool"=>$herramientas];
-       return response()
-      ->json(compact('data'));
+       return response()->json(compact('data'));
   }
 
   /**

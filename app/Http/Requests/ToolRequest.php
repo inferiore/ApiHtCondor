@@ -2,7 +2,7 @@
 
 namespace Validaciones;
 
-class HerramientaRequest extends ApiRequest
+class ToolRequest extends ApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -1,0 +1,2 @@
+scp -i inferiore.pem app/Http/Controllers/Rolcontroller.php ubuntu@18.217.157.196:/var/www/html/test/app/Http/Controllers/
+scp -i inferiore.pem app/Models/Rol.php ubuntu@18.217.157.196:/var/www/html/test/app/Models

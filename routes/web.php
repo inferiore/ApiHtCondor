@@ -13,10 +13,10 @@
 
 use App\Models\Herramienta;
 
-Route::get('/', function () {
-
-});
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/', function () {
+dd("test");
+});

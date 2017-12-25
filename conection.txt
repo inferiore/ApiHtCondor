@@ -1,0 +1,1 @@
+ssh -i inferiore.pem ubutnu@18.217.157.196

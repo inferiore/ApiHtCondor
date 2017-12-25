@@ -13,10 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 Route::get('status', 'CondorController@index');
+Route::get('/', 'CondorController@index');
 		
 Route::middleware('jwt.auth')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 	
 	Route::post('login', 'ApiAuthController@authenticate');
 	Route::resource('users', 'UserController');
@@ -28,13 +30,9 @@ Route::middleware('jwt.auth')->get('/user', function (Request $request) {
 		Route::get('jobs/downloadAlgorithm/{id}', 'JobController@downloadAlgorithm');
 		Route::get('jobs/showSubmit/{id}', 'JobController@showSubmit');
 		Route::post('jobs/sendJob/{id}', 'JobController@sendJob');
-
 		Route::resource('tools', 'ToolController');
-
 		Route::resource('files','FileController');
 		Route::post('files/update/{id}','FileController@update');
 		Route::get('files/donwload/{id}','FileController@donwload');
-		
 		Route::resource('roles', 'RolController');
-
 });	
