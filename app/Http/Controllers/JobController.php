@@ -90,7 +90,7 @@ class JobController extends Controller
               ,$request->file('algorithm')->getClientOriginalName(),"jobs");
    
      
-    $data = ["job"=>$job];
+    $data = ["job"=>$job,"message"=>"Created It!"];
     return response()
       ->json(compact('data'));  
     
@@ -136,7 +136,7 @@ class JobController extends Controller
    $job= $job->fill($request->all());
    $job->name=Auth::user()->code."-".$job->name;   
     $job->update();
-           $data = ["job"=>$job];
+           $data = ["job"=>$job,"message"=>"Updated It!"];
        return response()
       ->json(compact('data'));
     
@@ -152,6 +152,10 @@ class JobController extends Controller
   {
     $job=$this->jobs->findOrFail($id);
     $job->delete();
+    $data = ["job"=>$job,"message"=>"Delete It!"];
+    return response()
+      ->json(compact('data'));
+     
   }
 
   public function showSubmit($id){
@@ -195,9 +199,6 @@ class JobController extends Controller
       throw new Exception("some files not was copied, please contact support", 1);
     }
      $job->save();
-
-
-
 
    return response()->json(["msj"=>"job send successful"]);
   

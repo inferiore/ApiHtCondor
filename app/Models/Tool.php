@@ -31,7 +31,7 @@ class Tool extends Model
 
     public function scopeIndex($query){
         $query->join("toolstates","toolstates.id","=","idstate")
-        ->select('tools.name','observation',"toolstates.name as namState","toolstates.class","toolstates.class");
+        ->select('tools.id','tools.name','observation',"toolstates.name as namState","toolstates.class","toolstates.class");
         return $query;
             
     }
