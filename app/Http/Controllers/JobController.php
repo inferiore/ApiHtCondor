@@ -83,11 +83,11 @@ class JobController extends Controller
     $job->name=Auth::user()->code."-".$job->name;
     $job->idInsertUser=Auth::user()->id;
     $job->iteration=1;
-    // $job->algorithm=$request->file('algorithm')->getClientOriginalName();
+    $job->algorithm=$request->file('algorithm')->getClientOriginalName();
     $job->save();
-    // $request->file('algorithm')
-    // ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
-    //           ,$request->file('algorithm')->getClientOriginalName(),"jobs");
+    $request->file('algorithm')
+    ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
+              ,$request->file('algorithm')->getClientOriginalName(),"jobs");
    
      
     $data = ["job"=>$job,"message"=>"Created It!"];
