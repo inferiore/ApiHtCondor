@@ -102,7 +102,7 @@ class ToolController extends Controller
     $herramientas=$this->herramienta->find($id);
     $herramientas= $herramientas->fill($request->all());
     $herramientas->update();
-    $data = ["tool"=>$herramientas,"message"="Update It!"];
+    $data = ["tool"=>$herramientas,"message"=>"Update It!"];
        return response()->json(compact('data'));
   }
 

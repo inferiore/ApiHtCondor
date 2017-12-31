@@ -200,7 +200,7 @@ class JobController extends Controller
     }
      $job->save();
 
-   return response()->json(["msj"=>"job send successful"]);
+   return response()->json(["message"=>"job send successful"]);
   
   }
 
@@ -209,7 +209,7 @@ class JobController extends Controller
     $job->idState=1;
     $job->save();
     return response()
-      ->json(["msj"=>"job send successful"]);
+      ->json(["message"=>"job send successful"]);
   
   }
   
@@ -220,14 +220,12 @@ class JobController extends Controller
 
     //the before file must be deleted
     Storage::disk("jobs")->delete('job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
-    
-
     $job->algorithm=$request->file('algorithm')->getClientOriginalName();
     //save the new file on disk
     $request->file('algorithm')
     ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
               ,$request->file('algorithm')->getClientOriginalName(),"jobs");
-    $data = ["job"=>$job];
+    $data = ["job"=>$job,"message"=>"Changed It!"];
    $job->save();
        return response()->json(compact('data','path'));
   }
