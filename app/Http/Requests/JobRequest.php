@@ -32,6 +32,7 @@ class JobRequest extends ApiRequest
                     'idState' => 'required'
                 ];  
             case 'POST':
+
                return
                 [
                     'name' => 'required',
@@ -40,8 +41,6 @@ class JobRequest extends ApiRequest
                     'submitCondor' => 'required',
                     'idState' => 'required'
                 ];  
-            default: break;
-
-        
-    }
+        }        
+     }
 }

@@ -9,7 +9,7 @@ use App\Models\Job;
 use App\Models\File;
 use JWTAuth;
 use Illuminate\Http\Request;
-//use Validaciones\JobRequest;
+use Validaciones\JobRequest;
 use Illuminate\Support\Facades\Auth;
 use Storage;
 use Exception;
@@ -75,7 +75,7 @@ class JobController extends Controller
    *
    * @return Response
    */
-  public function store(Request $request)
+  public function store(JobRequest $request)
   {
     
     $job=$this->jobs->fill($request->all());
@@ -83,11 +83,11 @@ class JobController extends Controller
     $job->name=Auth::user()->code."-".$job->name;
     $job->idInsertUser=Auth::user()->id;
     $job->iteration=1;
-    $job->algorithm=$request->file('algorithm')->getClientOriginalName();
+    // $job->algorithm=$request->file('algorithm')->getClientOriginalName();
     $job->save();
-    $request->file('algorithm')
-    ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
-              ,$request->file('algorithm')->getClientOriginalName(),"jobs");
+    // $request->file('algorithm')
+    // ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
+    //           ,$request->file('algorithm')->getClientOriginalName(),"jobs");
    
      
     $data = ["job"=>$job,"message"=>"Created It!"];
