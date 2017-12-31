@@ -28,7 +28,7 @@ class ToolController extends Controller
    }
   public function index(Request $request)
   {
-    $herramientas = $this->herramienta->filters($request->all())->Index()->get();
+    $herramientas = $this->herramienta->fitlers($request->all())->Index()->get();
     $toolStates=$this->toolStates->all();
    $data = ["tools"=>$herramientas,'toolStates'=>$toolStates,"message"=>"Created It!"];
 
@@ -101,7 +101,8 @@ class ToolController extends Controller
   {
     $herramientas=$this->herramienta->find($id);
     $herramientas= $herramientas->fill($request->all());
-    $data = ["tool"=>$herramientas];
+    $herramientas->update();
+    $data = ["tool"=>$herramientas,"message"="Update It!"];
        return response()->json(compact('data'));
   }
 
@@ -115,7 +116,7 @@ class ToolController extends Controller
   {
     $herramientas=$this->herramienta->findOrFail($id);
     $herramientas->delete();
-    $data = ["message"=>"deleted it!"];
+    $data = ["message"=>"Deleted It!"];
        return response()->json(compact('data'));
   
   }

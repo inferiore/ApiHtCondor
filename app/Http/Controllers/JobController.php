@@ -135,7 +135,7 @@ class JobController extends Controller
    $job=$this->jobs->findOrFail($id);
    $job= $job->fill($request->all());
    $job->name=Auth::user()->code."-".$job->name;   
-    $job->update();
+  $job->update();
            $data = ["job"=>$job,"message"=>"Updated It!"];
        return response()
       ->json(compact('data'));
