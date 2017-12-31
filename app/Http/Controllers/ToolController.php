@@ -28,9 +28,10 @@ class ToolController extends Controller
    }
   public function index(Request $request)
   {
-    $herramientas = $this->herramienta->fitlers($request->all())->Index()->get();
+    $herramientas = $this->herramienta
+    ->Index()->Filters($request->all())->get();
     $toolStates=$this->toolStates->all();
-   $data = ["tools"=>$herramientas,'toolStates'=>$toolStates,"message"=>"Created It!"];
+   $data = ["tools"=>$herramientas,'toolStates'=>$toolStates];
 
    return response()
       ->json(compact('data')); 
@@ -62,7 +63,7 @@ class ToolController extends Controller
     $herramienta=$this->herramienta->fill($request->all());
     $herramienta->idInsertUser=Auth::user()->id;    
     $herramienta->save();
-    $data = ["tool"=>$herramienta];
+    $data = ["tool"=>$herramienta,"message"=>"Created It!"];
     return response()
       ->json(compact('data'));   
   }

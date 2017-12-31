@@ -25,6 +25,7 @@ class Tool extends Model
             else
                 $query->where("tools.idState",$datos["idState"]);
         }
+        
     	return $query;
     }
 
