@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Storage;
 
 
+
 class FileController extends Controller 
 {
 
@@ -25,11 +26,9 @@ class FileController extends Controller
 
   public function index(Request $request){
 
-   $files = $this->file->filters($request->all())->get();
-   $data = ["file"=>$files];
-
-   return response()
-      ->json(compact('data')); 
+   $files = $this->file->list($request->all());
+   $data = ["files"=>$files];
+   return response()->json(compact('data')); 
 
   }
 
@@ -50,18 +49,41 @@ class FileController extends Controller
    */
   public function store(Request $request)
   {
-    $file=$this->file->fill($request->all());
+
+     if(is_null($request->get("idJob"))){
+      throw new Exception("The id job is required", 1);
+    }
+
     $job=$this->job->findOrFail($request->get("idJob"));
-    $file->realname=$request->file('realname')->getClientOriginalName();
-    $file->fullPath=$request->file('realname')
-    ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
-              ,$request->file('realname')->getClientOriginalName(),"jobs");
-    $file->save();
-     $data = ["file"=>$file,"job"=>$job];
+    
+    if(is_null($job)){
+       throw new Exception("The id job  should be valid", 1);
+    }
+    $moves=$this->file->moveToDestiny($job);
+     $data=["moves"=>$moves,"message"=>"Your job: ".$job->name." is ready to send!"];
+
     return response()
       ->json(compact('data'));  
     
   }
+  public function uploadFiles(Request $request)
+  {
+     
+    for ($i=0; $i <count($request->file('realname')) ; $i++) { 
+      $clientFile=$request->file('realname')[$i];
+      $file= new file();
+      $file->realname=$clientFile->getClientOriginalName();
+      $file->fullPath=$clientFile
+      ->storeAs('job-0/iteracion-0'
+                ,$clientFile->getClientOriginalName(),"jobs");
+      $data = ["file"=>$file];
+    }
+    return response()
+      ->json(compact('data'));  
+    
+  }
+  
+
 
   /**
    * Display the specified resource.

@@ -27,8 +27,6 @@ class JobRequest extends ApiRequest
                 return 
                 [
                     'name' => 'required',
-                    'outPut' => 'required',
-                    'submitCondor' => 'required',
                     'idState' => 'required'
                 ];  
             case 'POST':
@@ -36,10 +34,7 @@ class JobRequest extends ApiRequest
                return
                 [
                     'name' => 'required',
-                    'algorithm' => 'required|file',
-                    'outPut' => 'required',
-                    'submitCondor' => 'required',
-                    'idState' => 'required'
+                    'algorithm' => 'required'
                 ];  
         }        
      }

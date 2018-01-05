@@ -12,12 +12,12 @@ class CreateJobsTable extends Migration {
 			$table->string('name');
 			$table->string('observation');
 			$table->string('algorithm');
-			$table->string('outPut');
-			$table->string('submitCondor');
-			$table->integer('idState')->unsigned();
+			$table->string('outPut')->default('outPut.outPut');
+			$table->string('submitCondor')->default('submitCondor.submit');
+			$table->integer('idState')->default('1')->unsigned();
 			$table->integer('idInsertUser')->unsigned();
 			$table->timestamps();
-			$table->integer('iteration')->default('0');
+			$table->integer('iteration')->default('1');
 			$table->integer('idTool')->unsigned();
 		});
 	}

@@ -25,14 +25,14 @@ class Tool extends Model
             else
                 $query->where("tools.idState",$datos["idState"]);
         }
-        
+
     	return $query;
     }
 
 
     public function scopeIndex($query){
         $query->join("toolstates","toolstates.id","=","idstate")
-        ->select('tools.id','tools.name','observation',"toolstates.name as namState","toolstates.class","toolstates.class");
+        ->select('tools.id','tools.name','observation',"tools.path","toolstates.name as namState","toolstates.class","toolstates.class");
         return $query;
             
     }

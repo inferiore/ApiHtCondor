@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Job extends Model 
 {
@@ -43,5 +44,12 @@ class Job extends Model
         ->select("jobs.*","jobstates.name as nameState","jobstates.class","tools.name as nameTool");
         return $query;   
     }
+
+     public function scopeLast($query)
+    {
+        $query->where("idInsertUser",Auth::user()->id)->orderBy("id","desc")->take(1);
+        return $query->get();   
+    }
+
 
 }

@@ -11,7 +11,7 @@ class CreateFilesTable extends Migration {
 			$table->increments('id');
 			$table->string('realname');
 			$table->string('fullPath');
-			$table->integer('idJob')->unsigned();
+			$table->integer('idJob')->nullable()->unsigned();
 			$table->timestamps();
 		});
 	}

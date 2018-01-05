@@ -83,14 +83,15 @@ class JobController extends Controller
     $job->name=Auth::user()->code."-".$job->name;
     $job->idInsertUser=Auth::user()->id;
     $job->iteration=1;
-    $job->algorithm=$request->file('algorithm')->getClientOriginalName();
+
+    // //delete the before algorithm
+    // Storage::disk("jobs")->delete('job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
+    //move algorithms file to jobs folders    
     $job->save();
-    $request->file('algorithm')
-    ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
-              ,$request->file('algorithm')->getClientOriginalName(),"jobs");
-   
-     
+    $file='jobs/job-0/algorithms/'.$job->algorithm;
+    Storage::move($file, "jobs/job-".$job->id."/iteracion-".$job->iteration."/".$job->algorithm);    
     $data = ["job"=>$job,"message"=>"Created It!"];
+
     return response()
       ->json(compact('data'));  
     
@@ -154,8 +155,7 @@ class JobController extends Controller
     $job->delete();
     $data = ["job"=>$job,"message"=>"Delete It!"];
     return response()
-      ->json(compact('data'));
-     
+      ->json(compact('data'));     
   }
 
   public function showSubmit($id){
@@ -214,19 +214,19 @@ class JobController extends Controller
   }
   
 
-  public function changeAlgorithm($id, Request $request){
+  public function changeAlgorithm($id=null, Request $request){
 
-    $job=$this->jobs->findOrFail($id)->fill($request->all());
-
-    //the before file must be deleted
-    Storage::disk("jobs")->delete('job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
-    $job->algorithm=$request->file('algorithm')->getClientOriginalName();
-    //save the new file on disk
-    $request->file('algorithm')
-    ->storeAs('job-'.$job->id."/iteracion-".$job->iteration
+      if(!is_file($request->file('algorithm'))){
+        throw new Exception("The input algorithm must be file", 1);
+      }
+      //save the new file on disk
+    $path=$request->file('algorithm')
+    ->storeAs('job-0/algorithms'
               ,$request->file('algorithm')->getClientOriginalName(),"jobs");
-    $data = ["job"=>$job,"message"=>"Changed It!"];
-   $job->save();
+
+    
+    $data = ["message"=>"Upload!","path"=>$path,"basename"=>basename($path)];
+  
        return response()->json(compact('data','path'));
   }
 
