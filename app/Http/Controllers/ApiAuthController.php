@@ -62,6 +62,9 @@ class ApiAuthController extends Controller
         // $user=User::find(1);
         // $user->password=\Hash::make("baeder");
         // $user->save();
+        // $usuarios=User::find(1);
+        // $usuarios->password=\Hash::make("ederba");
+        // $usuarios->save();
         
         $credentials = $request->only('code', 'password');
 

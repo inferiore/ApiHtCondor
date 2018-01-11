@@ -27,6 +27,7 @@ class JobRequest extends ApiRequest
                 return 
                 [
                     'name' => 'required',
+                    'observation'=>"required",
                     'idState' => 'required'
                 ];  
             case 'POST':
@@ -34,6 +35,7 @@ class JobRequest extends ApiRequest
                return
                 [
                     'name' => 'required',
+                    'observation'=>"required",
                     'algorithm' => 'required'
                 ];  
         }        

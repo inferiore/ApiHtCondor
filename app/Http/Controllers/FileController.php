@@ -55,12 +55,18 @@ class FileController extends Controller
     }
 
     $job=$this->job->findOrFail($request->get("idJob"));
-    
+  
+
     if(is_null($job)){
        throw new Exception("The id job  should be valid", 1);
     }
+
+    if(!is_null($request->get("iteration"))) {
+      $job->iteration=$request->get("iteration");
+    }
     $moves=$this->file->moveToDestiny($job);
      $data=["moves"=>$moves,"message"=>"Your job: ".$job->name." is ready to send!"];
+     
 
     return response()
       ->json(compact('data'));  
@@ -142,15 +148,39 @@ class FileController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function destroy($id)
+  public function destroy(Request $request)
   {
     //the before file must be deleted
-    $file=$this->file->findOrFail($id);
-    $job=$this->job->findOrFail($file->idJob);
-    Storage::disk("jobs")->delete('job-'.$job->id."/iteracion-".$job->iteration."/".$file->realname);
-    $file->delete();
-    $data = ["ok"=>"deleted"];
-  return response()->json(compact('data'));
+    //$file=$this->file->findOrFail($id);
+    //$job=$this->job->findOrFail($file->idJob);
+    if(is_null($request->get("idJob"))){
+      throw new Exception("The id job is required", 1);
+    }
+    $directory="job-".$request->get("idJob")."/";
+
+    if(!is_null($request->get("iteration"))){
+      $directory.="iteracion-".$request->get("iteration")."/";      
+      if((@$request->get("basename"))!="null"){
+        $directory.=$request->get("basename");
+        Storage::disk("jobs")->delete($directory);
+        $message="your file iteration-".$request->get("iteration")."/". $request->get("basename") ." has been deleted!";         
+        $data = ["message"=>$message];
+         return response()->json(compact('data'));     
+      }
+      //throw new Exception("The iteration is required", 1);    
+      Storage::disk("jobs")->deleteDirectory($directory);
+      $message="your folder iteration ".$request->get("iteracion")." has been deleted!";
+        $data = ["message"=>$message];
+         return response()->json(compact('data'));
+      
+    }else{
+      throw new Exception("The iteration is required!", 1);    
+    }
+       
+
+
+    //$file->delete();
+    
   }
 
  /**
@@ -159,15 +189,16 @@ class FileController extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function donwload($id)
+  public function donwload($id,$iteration,$basename)
   {
     //the before file must be deleted
-    $file=$this->file->findOrFail($id);
-    $job=$this->job->findOrFail($file->idJob);
+    // $file=$this->file->findOrFail($id);
+    // $job=$this->job->findOrFail($file->idJob);
+
     $file=Storage::disk('jobs')->getDriver()
      ->getAdapter()
-     ->applyPathPrefix("/job-".$job->id."/iteracion-".$job->iteration."/".$file->realname);
-
+     ->applyPathPrefix("/job-".$id."/iteracion-".$iteration."/".$basename);
+     
     return response()->download($file);
 
   }

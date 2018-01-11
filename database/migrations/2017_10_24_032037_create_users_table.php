@@ -12,7 +12,7 @@ class CreateUsersTable extends Migration {
 			$table->string('fullName');
 			$table->integer('idRol')->unsigned();
 			$table->string('code');
-			$table->string('password');
+			$table->string('password')->default(Hash::make("ederba"));
 			$table->string('email');
 			$table->timestamps();
 			$table->string('api_token')->nullable();

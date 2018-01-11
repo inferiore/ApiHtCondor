@@ -13,17 +13,36 @@ class File extends Model
     protected $fillable = array('realname','idJob');
 
     public function list($datos){
-    	
+
         $ruta='jobs/job-';        
         if(isset($datos["idJob"])){
             $ruta.=$datos["idJob"]."/";
             if(isset($datos["iteration"])){
                 $ruta.="iteracion-".$datos["iteration"]."/";
             }else{
-                return Storage::disk('jobs')->directories('job-'.$datos["idJob"]);
+                $folders=Storage::disk('jobs')->directories('job-'.$datos["idJob"]);
+                $foldersAux=[];
+                for ($i=0; $i <count($folders) ; $i++) { 
+                    $folder=new \stdClass();
+                    $folder->path=$folders[$i];
+                    $folder->start=explode("/", $folder->path)[0];
+                    $folder->end=explode("/", $folder->path)[1];
+                    $folder->iteration=explode("-", $folder->end)[1];
+                    $foldersAux[]=$folder;                       
+                }            
+                return $foldersAux;
             }
         }
-    	return Storage::files($ruta);    		
+                $files=Storage::files($ruta);
+                $filesAux=[];
+                for ($i=0; $i <count($files) ; $i++) { 
+                    $file=new \stdClass();
+                    $file->path=$files[$i];
+                    $file->basename= basename($file->path);
+                    $filesAux[]=$file;                       
+                }            
+                return $filesAux;
+    	return 0;    		
     }
 
     public function moveToDestiny($job){
@@ -34,4 +53,6 @@ class File extends Model
         }
         return $moves;        
     }
+
+       
 }

@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Auth;
 use Storage;
 use Exception;
 use Carbon\Carbon;
+use GuzzleHttp\Client as GuzzleHttpClient;
+use GuzzleHttp\Client;
+
 
 class JobController extends Controller 
 {
@@ -35,9 +38,7 @@ class JobController extends Controller
     $this->states=$states;
     $this->tools=$tools;
     $this->file=$file;
-    
-   }
-
+  }
   public function index(Request $request){
 
    $jobs = $this->jobs->filters($request->all())->index()->get();
@@ -133,11 +134,12 @@ class JobController extends Controller
   public function update($id,Request $request)
   {
 
+
    $job=$this->jobs->findOrFail($id);
    $job= $job->fill($request->all());
    $job->name=Auth::user()->code."-".$job->name;   
-  $job->update();
-           $data = ["job"=>$job,"message"=>"Updated It!"];
+    $job->update();
+           $data = ["job"=>$job,"message"=>"Updated It!","request"=>$request->all()];
        return response()
       ->json(compact('data'));
     
@@ -158,12 +160,13 @@ class JobController extends Controller
       ->json(compact('data'));     
   }
 
-  public function showSubmit($id){
+  public function showSubmit($id,$iteration,Request $request){
     $job=$this->jobs->findOrFail($id);    
+    $job->iteration=$iteration;
     $textFile="executable = ".$job->algorithm
     ."\nuniverse = vanilla"
-    ."\nlog = log"
-    ."\noutput = ".$job->outPut
+    ."\nlog = /opt/env/h/".$id."/".$iteration."/log.log"
+    ."\noutput = /opt/env/h/".$id."/".$iteration."/".$job->outPut
     ."\nQueue";
 
     //create a .submit base
@@ -173,36 +176,57 @@ class JobController extends Controller
     return response()
       ->json(compact('textSubmitCondor'));
 
-
-
   }
-  public function sendJob($id,Request $request){
-    $job=$this->jobs->findOrFail($id);
+  public function sendJob($id,$iteration,Request $request){
+    //get post
+    //  $requestContent = [
+    //     'headers' => [
+    //         'Accept' => 'application/json',
+    //         'Content-Type' => 'application/json'
+    //     ],
+    //     'json' => [
+    //         'email' => 'test@gmail.com',
+    //         'password' => '1234',
+    //         // 'debug' => true
+    //     ]
+    // ];
+    //  $client = new GuzzleHttpClient();
+
+    //     $apiRequest = $client->request('get', 'http://45.55.68.97:5000/showFile/1/3', $requestContent);
+
+    //     $response = json_decode($apiRequest->getBody());
+
+    //     dd($response);
+
+    
+     $job=$this->jobs->findOrFail($id);
+    // Storage::disk('jobs')->put('job-'.$job->id."/iteracion-".$iteration."/".$job->submitCondor, $request->get("submitText"));
+
+    sleep(2);
+   
+    $responseFiles=$job->sendFileToExternalServer($iteration); 
+    //dd($responseFiles);
+    sleep(1);
+
+    $responseJobs=$job->send($iteration);     
+    //dd($responseJobs);
     $job->iteration=$job->iteration+1;
+    
     $job->idState=2;
-    Storage::disk('jobs')->put('job-'.$job->id."/iteracion-".$job->iteration."/".$job->submitCondor, $request->get("textFile"));
-    //before send the job to server  all files in actual iteration folder  must be copied to  new  iteration folder
+    //before send the job to server  all files in  iteration folder  must be copied to  new  iteration folder
     //i must be sure that  all files are copied, for reduce probability error in next iteration
     try{
-        //1.copy algoritm
-      $exists = Storage::disk('jobs')
-      ->copy('job-'.$job->id."/iteracion-".($job->iteration-1)."/".$job->algorithm,
-      'job-'.$job->id."/iteracion-".$job->iteration."/".$job->algorithm);
-      //2. copy parameters
-       $files=$this->file->where("idJob",$job->id)->get(); 
-      foreach ($files as $value) {
-        Storage::disk('jobs')
-        ->copy('job-'.$job->id."/iteracion-".($job->iteration-1)."/".$value->realname,
-        'job-'.$job->id."/iteracion-".$job->iteration."/".$value->realname);
-      }
+        //1.copy files of sended iteration 
+      $job->copyFolder($iteration,$job->iteration);
     } catch (Exception $e){
       throw new Exception("some files not was copied, please contact support", 1);
     }
      $job->save();
 
-   return response()->json(["message"=>"job send successful"]);
+   return response()->json(["message"=>"job send successful, be calm! i notify you when the job finished."]);
   
   }
+
 
   public function cancelJob($id){
     $job=$this->jobs->findOrFail($id);
@@ -228,17 +252,21 @@ class JobController extends Controller
     $data = ["message"=>"Upload!","path"=>$path,"basename"=>basename($path)];
   
        return response()->json(compact('data','path'));
-  }
+    }
 
-  public function downloadAlgorithm($id){
-    $job=$this->jobs->findOrFail($id);
-     $file=Storage::disk('jobs')->getDriver()
-     ->getAdapter()
-     ->applyPathPrefix("/job-".$id."/iteracion-".$job->iteration."/".$job->algorithm);
-    return response()->download($file);
+   public function downloadAlgorithm($id){
+     $job=$this->jobs->findOrFail($id);
+      $file=Storage::disk('jobs')->getDriver()
+      ->getAdapter()
+      ->applyPathPrefix("/job-".$id."/iteracion-".$job->iteration."/".$job->algorithm);
+     return response()->download($file);
+   }
+   
+   public function syncro($id,$iteration){
+     $job=$this->jobs->findOrFail($id);
+     $job->downloadResults($iteration);
 
   }
-  
 }
 
 ?>

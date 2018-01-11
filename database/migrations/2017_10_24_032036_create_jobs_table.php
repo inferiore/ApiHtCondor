@@ -10,7 +10,7 @@ class CreateJobsTable extends Migration {
 		Schema::create('jobs', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
-			$table->string('observation');
+			$table->string('observation')->nullable();
 			$table->string('algorithm');
 			$table->string('outPut')->default('outPut.outPut');
 			$table->string('submitCondor')->default('submitCondor.submit');

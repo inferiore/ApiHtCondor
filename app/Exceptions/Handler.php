@@ -50,7 +50,8 @@ class Handler extends ExceptionHandler
         if ($exception instanceof ModelNotFoundException)
         {
             return response([
-                    'error' => 'No se encontro el recurso solicitado'
+                    'error' => 'No se encontro el recurso solicitado',
+                    "exception"=>$exception
                 ], 404);
         }
         if ($exception instanceof MethodNotAllowedHttpException)
@@ -65,6 +66,33 @@ class Handler extends ExceptionHandler
                     'error' => 'No se encontro el recurso solicitado'
                 ], 404);
         }
+
+        if ($exception instanceof ConnectException)
+        {
+            return response([
+                    'error' => 'No se pudo conectar con el servidor condor',
+                    'exception'=>$exception
+
+                ], 404);
+        }
+        if ( get_class($exception) == "GuzzleHttp\Exception\ServerException")
+        {
+            return response([
+                    'error' => 'Error en el servidor condor',
+                    'exception'=>$exception
+
+                ], 404);
+        }
+        if ( get_class($exception) == "GuzzleHttp\Exception\ConnectException")
+        {
+            return response([
+                    'error' => 'No se pudo conectar con el servidor condor',
+                    'exception'=>$exception
+
+                ], 404);
+        }
+
+        
         // $user = User::where('email', 'rol_id', config('constantes.rol_administrador'))->first();
         // En caso que no cargue la pagina comentar esta linea
         // $user->notify(new \Notificaciones\ErrorNotificacion($exception));
