@@ -91,7 +91,7 @@ class JobController extends Controller
     $job->save();
     $file='jobs/job-0/algorithms/'.$job->algorithm;
     Storage::move($file, "jobs/job-".$job->id."/iteracion-".$job->iteration."/".$job->algorithm);    
-    $data = ["job"=>$job,"message"=>"Created It!"];
+    $data = ["job"=>$job,"message"=>"Job Created!"];
 
     return response()
       ->json(compact('data'));  
@@ -177,31 +177,12 @@ class JobController extends Controller
       ->json(compact('textSubmitCondor'));
 
   }
+
+
   public function sendJob($id,$iteration,Request $request){
-    //get post
-    //  $requestContent = [
-    //     'headers' => [
-    //         'Accept' => 'application/json',
-    //         'Content-Type' => 'application/json'
-    //     ],
-    //     'json' => [
-    //         'email' => 'test@gmail.com',
-    //         'password' => '1234',
-    //         // 'debug' => true
-    //     ]
-    // ];
-    //  $client = new GuzzleHttpClient();
-
-    //     $apiRequest = $client->request('get', 'http://45.55.68.97:5000/showFile/1/3', $requestContent);
-
-    //     $response = json_decode($apiRequest->getBody());
-
-    //     dd($response);
-
     
-     $job=$this->jobs->findOrFail($id);
-    // Storage::disk('jobs')->put('job-'.$job->id."/iteracion-".$iteration."/".$job->submitCondor, $request->get("submitText"));
-
+    $job=$this->jobs->findOrFail($id);
+     // Storage::disk('jobs')->put('job-'.$job->id."/iteracion-".$iteration."/".$job->submitCondor, $request->get("submitText"));
     sleep(2);
    
     $responseFiles=$job->sendFileToExternalServer($iteration); 
@@ -209,19 +190,10 @@ class JobController extends Controller
     sleep(1);
 
     $responseJobs=$job->send($iteration);     
-    //dd($responseJobs);
-    $job->iteration=$job->iteration+1;
     
     $job->idState=2;
-    //before send the job to server  all files in  iteration folder  must be copied to  new  iteration folder
-    //i must be sure that  all files are copied, for reduce probability error in next iteration
-    try{
-        //1.copy files of sended iteration 
-      $job->copyFolder($iteration,$job->iteration);
-    } catch (Exception $e){
-      throw new Exception("some files not was copied, please contact support", 1);
-    }
-     $job->save();
+    
+    $job->save();
 
    return response()->json(["message"=>"job send successful, be calm! i notify you when the job finished."]);
   
@@ -247,10 +219,8 @@ class JobController extends Controller
     $path=$request->file('algorithm')
     ->storeAs('job-0/algorithms'
               ,$request->file('algorithm')->getClientOriginalName(),"jobs");
-
     
-    $data = ["message"=>"Upload!","path"=>$path,"basename"=>basename($path)];
-  
+    $data = ["message"=>"Upload!","path"=>$path,"basename"=>basename($path)];  
        return response()->json(compact('data','path'));
     }
 
@@ -267,6 +237,21 @@ class JobController extends Controller
      $job->downloadResults($iteration);
 
   }
+  public function showFile($id,$iteracion,$basename){
+    $job=$this->jobs->findOrFail($id);
+
+    $fileText=Storage::disk('jobs')->get(
+      '/job-'.$job->id."/iteracion-".$iteracion."/".$basename);
+    return response()
+      ->json(compact('fileText'));    
+  }
+  public function createFolder($id,$iteration=0){
+  $job=$this->jobs->findOrFail($id);
+  $job->iteration=$job->iteration+1;    
+  $job->copyFolder($iteration,$job->iteration);
+
+  }
+    
 }
 
 ?>

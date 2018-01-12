@@ -37,6 +37,8 @@ Route::middleware('jwt.auth')->get('/user', function (Request $request) {
 		Route::get('files/delete','FileController@destroy');
 		Route::resource('roles', 'RolController');
 		Route::get('jobs/syncro/{id}/{iteration}','JobController@syncro');
+		Route::get('jobs/showFile/{id}/{iteration}/{basename}', 'JobController@showFile');
+		
 		
 });	
 	Route::get('files/download/{id}/{iteration}/{basename}','FileController@donwload');

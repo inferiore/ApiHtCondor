@@ -91,7 +91,6 @@ class Job extends Model
         try{
         $client = new Client();
         $apiRequest = $client->request('get', 'http://45.55.68.97:5000/condor/8.0.5/ejecucion/'.$this->id.'/'.$iteration.'/'.$this->submitCondor,[]);
-            dd($apiRequest->getStatusCode());
          $response = json_decode($apiRequest->getBody());        
         return $response;        
         } catch(Exception $e){
