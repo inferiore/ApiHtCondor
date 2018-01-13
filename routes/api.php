@@ -38,6 +38,8 @@ Route::middleware('jwt.auth')->get('/user', function (Request $request) {
 		Route::resource('roles', 'RolController');
 		Route::get('jobs/syncro/{id}/{iteration}','JobController@syncro');
 		Route::get('jobs/showFile/{id}/{iteration}/{basename}', 'JobController@showFile');
+		Route::post('jobs/newFolder/{id}', 'JobController@newFolder');
+		
 		
 		
 });	

@@ -53,6 +53,7 @@ class Job extends Model
     }
 
     public function copyFolder($fromIteration,$toIteration){
+        Storage::makeDirectory('jobs/job-'.$this->id.'/iteracion-'.$fromIteration);
         $files = Storage::files('jobs/job-'.$this->id.'/iteracion-'.$fromIteration);
         $copy=[];
         foreach ($files as $file) {

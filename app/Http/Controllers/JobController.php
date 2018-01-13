@@ -245,11 +245,14 @@ class JobController extends Controller
     return response()
       ->json(compact('fileText'));    
   }
-  public function createFolder($id,$iteration=0){
-  $job=$this->jobs->findOrFail($id);
-  $job->iteration=$job->iteration+1;    
-  $job->copyFolder($iteration,$job->iteration);
-
+  public function newFolder($id){
+    $job=$this->jobs->findOrFail($id);
+    $job->iteration=$job->iteration+1;    
+    $job->copyFolder($job->iteration-1,$job->iteration);
+    $job->save();
+    return response()
+      ->json(["message"=>"done!"]);
+ 
   }
     
 }
