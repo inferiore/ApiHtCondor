@@ -74,7 +74,7 @@ class Job extends Model
         }        
         try{
         $client = new Client();
-        $apiRequest = $client->request('POST', 'http://45.55.68.97:5000/upload/'.$this->id.'/'.$iteration, 
+        $apiRequest = $client->request('POST', env("CONDOR_URL_API","localhost").'upload/'.$this->id.'/'.$iteration, 
           [
           'multipart' => $files                        
           ]);
@@ -91,30 +91,33 @@ class Job extends Model
          
         try{
         $client = new Client();
-        $apiRequest = $client->request('get', 'http://45.55.68.97:5000/condor/8.0.5/ejecucion/'.$this->id.'/'.$iteration.'/'.$this->submitCondor,[]);
+        $endPoint=env("CONDOR_URL_API","localhost").'condor/8.0.5/ejecucion/'.$this->id.'/'.$iteration.'/'.$this->submitCondor;
+        $apiRequest = $client->request('get', env("CONDOR_URL_API","localhost").'condor/8.0.5/ejecucion/'.$this->id.'/'.$iteration.'/'.$this->submitCondor,[]);
          $response = json_decode($apiRequest->getBody());        
         return $response;        
         } catch(Exception $e){
             throw new Exception("Error while sending  files to external server please check config", 1);
             
         }
+
+
     }
     public function downloadResults($iteration){
         $client = new Client();
         $downloads=$this->filesInServer($iteration);
         foreach ($downloads as  $download) {
-             echo basename($download)."<br>";
+             //echo basename($download)."<br>";
             $pathToSave=str_replace("/","\\",str_replace(basename($download), "", $download));
             $pathToSave=str_replace(basename($download), "", $download);            
             $resource = fopen($download, 'w');
-            $client->request('POST', 'http://45.55.68.97:5000/download/'.$this->id.'/'.$iteration."/".basename($download)
+            $client->request('POST', env("CONDOR_URL_API","localhost").'download/'.$this->id.'/'.$iteration."/".basename($download)
              , ['sink' =>$resource]);
         }
         
     }
     public function filesInServer($iteration){
         $client = new Client();
-        $apiRequest = $client->request('get', 'http://45.55.68.97:5000/showFile/'.$this->id.'/'.$iteration, []);
+        $apiRequest = $client->request('get', env("CONDOR_URL_API","localhost").'showFile/'.$this->id.'/'.$iteration, []);
         $response = json_decode($apiRequest->getBody());
         $filesInServer=$response->files;
 
@@ -132,8 +135,10 @@ class Job extends Model
              ->applyPathPrefix("/job-".$this->id."/iteracion-".$iteration."/".basename($value));
             $fopenTodownloads[]=$staticPath;            
             }         
-            return $fopenTodownloads;           
+            return $fopenTodownloads;
+
         }
+
 
 
 }

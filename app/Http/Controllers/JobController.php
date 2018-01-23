@@ -165,8 +165,8 @@ class JobController extends Controller
     $job->iteration=$iteration;
     $textFile="executable = ".$job->algorithm
     ."\nuniverse = vanilla"
-    ."\nlog = /opt/env/h/".$id."/".$iteration."/log.log"
-    ."\noutput = /opt/env/h/".$id."/".$iteration."/".$job->outPut
+    ."\nlog = /home/ubuntu/env/h/".$id."/".$iteration."/log.log"
+    ."\noutput = /home/ubuntu/env/h/".$id."/".$iteration."/".$job->outPut
     ."\nQueue";
 
     //create a .submit base
@@ -182,20 +182,21 @@ class JobController extends Controller
   public function sendJob($id,$iteration,Request $request){
     
     $job=$this->jobs->findOrFail($id);
-     // Storage::disk('jobs')->put('job-'.$job->id."/iteracion-".$iteration."/".$job->submitCondor, $request->get("submitText"));
-    sleep(2);
-   
+    Storage::disk('jobs')->put('job-'.$job->id."/iteracion-".$iteration."/".$job->submitCondor, 
+    $request->get("submitText"));
+
+    sleep(1);   
     $responseFiles=$job->sendFileToExternalServer($iteration); 
     //dd($responseFiles);
     sleep(1);
-
     $responseJobs=$job->send($iteration);     
-    
+
     $job->idState=2;
     
     $job->save();
 
    return response()->json(["message"=>"job send successful, be calm! i notify you when the job finished."]);
+
   
   }
 
@@ -205,7 +206,7 @@ class JobController extends Controller
     $job->idState=1;
     $job->save();
     return response()
-      ->json(["message"=>"job send successful"]);
+      ->json(["message"=>"job canceled"]);
   
   }
   
@@ -234,12 +235,16 @@ class JobController extends Controller
    
    public function syncro($id,$iteration){
      $job=$this->jobs->findOrFail($id);
+     Storage::disk('jobs')->delete("/job-".$id."/iteracion-".$iteration."/".$job->outPut);
+     Storage::disk('jobs')->delete("/job-".$id."/iteracion-".$iteration."/log.log");     
      $job->downloadResults($iteration);
+     return response()
+      ->json(["message"=>"done!"]);
+      
 
   }
   public function showFile($id,$iteracion,$basename){
     $job=$this->jobs->findOrFail($id);
-
     $fileText=Storage::disk('jobs')->get(
       '/job-'.$job->id."/iteracion-".$iteracion."/".$basename);
     return response()
@@ -252,6 +257,7 @@ class JobController extends Controller
     $job->save();
     return response()
       ->json(["message"=>"done!"]);
+
  
   }
     

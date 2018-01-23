@@ -96,27 +96,27 @@ class Handler extends ExceptionHandler
         // $user = User::where('email', 'rol_id', config('constantes.rol_administrador'))->first();
         // En caso que no cargue la pagina comentar esta linea
         // $user->notify(new \Notificaciones\ErrorNotificacion($exception));
-        // if($exception instanceof QueryException)
-        // {
-        //     return response([
-        //             'error' => 'La petici&oacute;n del navegador no se ha podido completar porque se ha producido un error en la consulta.',
-        //             'debug' => $exception->getMessage()
-        //         ], 409);
-        // }
-        // if($exception instanceof ErrorException)
-        // {
-        //     return response([
-        //             'error' => 'La petici&oacute;n del navegador no se ha podido completar porque se ha producido un error en la consulta.',
-        //             'debug' => $exception->getMessage()
-        //         ], 409);
-        // }
-        // if($exception instanceof Exception)
-        // {
-        //     return response([
-        //             'error' => 'La petici&oacute;n del navegador no se ha podido completar porque se ha producido un error en la consulta.'.($exception->getMessage()),
-        //             'debug' => $exception->getMessage()
-        //         ], 409);
-        // }
+        if($exception instanceof QueryException)
+        {
+            return response([
+                    'error' => 'La petici&oacute;n del navegador no se ha podido completar porque se ha producido un error en la consulta.',
+                    'debug' => $exception->getMessage()
+                ], 409);
+        }
+        if($exception instanceof ErrorException)
+        {
+            return response([
+                    'error' => 'La petici&oacute;n del navegador no se ha podido completar porque se ha producido un error en la consulta.',
+                    'debug' => $exception->getMessage()
+                ], 409);
+        }
+        if($exception instanceof Exception)
+        {
+            return response([
+                    'error' => 'La petici&oacute;n del navegador no se ha podido completar porque se ha producido un error en la consulta.'.($exception->getMessage()),
+                    'debug' => $exception->getMessage()
+                ], 409);
+        }
         
         
         
